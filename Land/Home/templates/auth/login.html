@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Kerala BLMS{% endblock %}
+
+{% block content %}
+<section class="section-padding bg-slate-900 flex justify-center items-center min-h-screen">
+  <div class="card-glass p-10 w-full max-w-md shadow-web3" data-aos="fade-up">
+    <h2 class="text-3xl font-display font-bold text-white mb-8 text-center">Login to Kerala BLMS</h2>
+    <form method="post" autocomplete="off" novalidate>
+      {% csrf_token %}
+      {% if messages %}
+        <div class="mb-6">
+          {% for message in messages %}
+            <p class="text-sm mb-2 text-white">
+                {{ message }}
+            </p>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <div class="mb-6">
+        <label for="email" class="block text-slate-300 mb-2 font-semibold">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required
+          class="w-full px-4 py-3 rounded-lg bg-slate-800 text-slate-100 border border-slate-700 focus-web3" />
+      </div>
+      <div class="mb-6">
+        <label for="password" class="block text-slate-300 mb-2 font-semibold">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required
+          class="w-full px-4 py-3 rounded-lg bg-slate-800 text-slate-100 border border-slate-700 focus-web3" />
+      </div>
+      <button 
+       type="submit" 
+      class="bg-white text-gray-800 hover:bg-gray-100 font-semibold py-2 px-4 rounded-lg shadow w-full text-lg mb-4 transition duration-200">
+        Login
+      </button>
+
+      <p class="text-center text-slate-400">
+        Don't have an account?
+        <a href="/register" class="text-accent-400 hover:underline">Register here</a>
+      </p>
+    </form>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.addEventListener('focus', () => {
+        input.classList.add('ring-2', 'ring-accent-400');
+      });
+      input.addEventListener('blur', () => {
+        input.classList.remove('ring-2', 'ring-accent-400');
+      });
+    });
+  });
+</script>
+{% endblock %}

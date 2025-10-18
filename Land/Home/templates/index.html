@@ -1,0 +1,2251 @@
+{% extends "base.html" %}
+
+{% block title %}Kerala BLMS - Professional Blockchain Land Management Services{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Parallax -->
+<section class="section-padding bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 relative overflow-hidden" data-scroll-section>
+  <!-- 3D Grid Background -->
+  <canvas id="hero-3d-grid" class="fixed top-0 left-0 w-full h-screen pointer-events-none" style="z-index: -1;"></canvas>
+  
+  <!-- 3D Blockchain Cubes Canvas -->
+  <canvas id="blockchain-cubes" class="fixed top-0 left-0 w-full h-screen pointer-events-none" style="z-index: 0; opacity: 0.6;"></canvas>
+  
+  <!-- Floating Orbs Background -->
+  <div class="orbs-container fixed inset-0 pointer-events-none" style="z-index: 1;">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+    <div class="orb orb-5"></div>
+  </div>
+  
+  <!-- Particle Network Canvas -->
+  <canvas id="particle-network" class="fixed top-0 left-0 w-full h-screen pointer-events-none" style="z-index: 2; opacity: 0.3;"></canvas>
+  
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative" style="z-index: 10; padding-top: 100px; padding-bottom: 100px;">
+    <div class="hero-content" data-speed="0.8">
+      <div class="overflow-hidden mb-6">
+        <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-2 mb-4 hero-badge opacity-0">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+          </span>
+          <span class="text-blue-300 text-sm font-medium">Powered by Blockchain Technology</span>
+        </div>
+        <h1 class="text-4xl lg:text-6xl font-display font-bold text-white text-balance hero-title">
+          Modern Land Management <span class="text-blue-400 inline-block">Solutions</span>
+        </h1>
+      </div>
+      <div class="overflow-hidden mb-8">
+        <p class="text-xl text-slate-300 leading-relaxed hero-subtitle opacity-0">
+          Professional blockchain-based property registration services for Kerala.<br>
+          Experience secure, transparent, and efficient land management with cutting-edge technology.
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4 mb-12 hero-buttons opacity-0">
+        <a href="#services" class="btn-primary-blue text-center group relative overflow-hidden">
+          <span class="relative z-10 flex items-center justify-center gap-2">
+            <i class="fas fa-rocket"></i>
+            Explore Services
+          </span>
+          <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
+        </a>
+        <a href="{% url 'property_valuation' %}" class="btn-secondary-blue text-center group relative overflow-hidden">
+          <span class="relative z-10 flex items-center justify-center gap-2">
+            <i class="fas fa-chart-line"></i>
+            Land Value
+          </span>
+          <i class="fas fa-arrow-right ml-2 relative z-10 transform group-hover:translate-x-1 transition-transform"></i>
+        </a>
+      </div>
+      
+      <!-- Animated Stats Counter -->
+      <div class="grid grid-cols-3 gap-8 pt-8 border-t border-blue-900/30 hero-stats opacity-0">
+        <div class="text-center stat-item group cursor-pointer">
+          <div class="text-3xl font-bold text-blue-400 counter transition-all group-hover:scale-110" data-target="10000">0</div>
+          <div class="text-sm text-slate-400 mt-1 group-hover:text-blue-300 transition-colors">Properties Registered</div>
+          <div class="h-1 w-0 bg-blue-400 mx-auto mt-2 group-hover:w-full transition-all duration-300"></div>
+        </div>
+        <div class="text-center stat-item group cursor-pointer">
+          <div class="text-3xl font-bold text-blue-500 counter transition-all group-hover:scale-110" data-target="99.9">0</div>
+          <div class="text-sm text-slate-400 mt-1 group-hover:text-blue-300 transition-colors">Security Rate %</div>
+          <div class="h-1 w-0 bg-blue-500 mx-auto mt-2 group-hover:w-full transition-all duration-300"></div>
+        </div>
+        <div class="text-center stat-item group cursor-pointer">
+          <div class="text-3xl font-bold text-blue-300 transition-all group-hover:scale-110">24/7</div>
+          <div class="text-sm text-slate-400 mt-1 group-hover:text-blue-300 transition-colors">Support</div>
+          <div class="h-1 w-0 bg-blue-300 mx-auto mt-2 group-hover:w-full transition-all duration-300"></div>
+        </div>
+      </div>
+      
+      <!-- Trust Badges -->
+      <div class="flex items-center gap-6 mt-8 hero-trust opacity-0">
+        <div class="flex items-center gap-2 text-slate-400 text-sm">
+          <i class="fas fa-shield-check text-blue-400 text-lg"></i>
+          <span>Bank Grade Security</span>
+        </div>
+        <div class="flex items-center gap-2 text-slate-400 text-sm">
+          <i class="fas fa-certificate text-blue-400 text-lg"></i>
+          <span>Government Approved</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interactive Property Card with 3D Tilt -->
+    <div class="relative property-card-wrapper" data-speed="1.2" style="min-height: 500px;">
+      <div id="property-card" class="card-glass-blue p-8 shadow-blue relative backdrop-blur-xl" style="z-index: 15; transform-style: preserve-3d;">
+        <!-- Animated Border -->
+        <div class="absolute inset-0 rounded-xl border-animated-blue pointer-events-none"></div>
+        
+        <!-- Corner Accents -->
+        <div class="corner-accent corner-tl"></div>
+        <div class="corner-accent corner-tr"></div>
+        <div class="corner-accent corner-bl"></div>
+        <div class="corner-accent corner-br"></div>
+        
+        <div class="bg-slate-900/90 rounded-xl p-6 shadow-xl mb-6 relative overflow-hidden border border-blue-500/20">
+          <!-- Scan Line Effect -->
+          <div class="scan-line-blue absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent pointer-events-none"></div>
+          
+          <!-- Holographic Effect -->
+          <div class="holographic-overlay absolute inset-0 pointer-events-none"></div>
+          
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold text-slate-200 text-lg flex items-center gap-2">
+              <i class="fas fa-file-certificate text-blue-400"></i>
+              Property Certificate
+            </h3>
+            <span class="bg-blue-500 px-3 py-1.5 rounded-full text-xs font-medium text-white flex items-center gap-1 pulse-badge-blue">
+              <i class="fas fa-shield-check"></i> Verified
+            </span>
+          </div>
+          
+          <div class="space-y-3 text-slate-300">
+            <div class="property-row-blue flex justify-between items-center p-2.5 rounded-lg hover:bg-blue-950/30 transition-all cursor-pointer group">
+              <span class="text-slate-400 text-sm flex items-center gap-2">
+                <i class="fas fa-fingerprint text-blue-400"></i>
+                Property ID
+              </span>
+              <span class="font-mono text-blue-400 font-semibold flex items-center gap-2">
+                KL-TVM-2025-7834
+                <i class="fas fa-copy text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+              </span>
+            </div>
+            
+            <div class="property-row-blue flex justify-between items-center p-2.5 rounded-lg hover:bg-blue-950/30 transition-all cursor-pointer group">
+              <span class="text-slate-400 text-sm flex items-center gap-2">
+                <i class="fas fa-user-circle text-blue-400"></i>
+                Owner
+              </span>
+              <span class="flex items-center gap-2">
+                <div class="w-7 h-7 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-xs text-white font-bold ring-2 ring-blue-400/30 ring-offset-2 ring-offset-slate-900">
+                  RK
+                </div>
+                Rajesh Kumar
+              </span>
+            </div>
+            
+            <div class="property-row-blue flex justify-between items-center p-2.5 rounded-lg hover:bg-blue-950/30 transition-all cursor-pointer group">
+              <span class="text-slate-400 text-sm flex items-center gap-2">
+                <i class="fas fa-ruler-combined text-blue-400"></i>
+                Area
+              </span>
+              <span class="flex items-center gap-2">
+                <span class="text-blue-400 font-semibold">3.2 Acres</span>
+                <span class="text-xs bg-blue-500/10 px-2 py-1 rounded text-blue-400">Commercial</span>
+              </span>
+            </div>
+            
+            <div class="property-row-blue flex justify-between items-center p-2.5 rounded-lg hover:bg-blue-950/30 transition-all cursor-pointer group">
+              <span class="text-slate-400 text-sm flex items-center gap-2">
+                <i class="fas fa-map-marker-alt text-blue-400"></i>
+                Location
+              </span>
+              <span class="flex items-center gap-2">
+                Thiruvananthapuram, Kerala
+              </span>
+            </div>
+            
+            <div class="property-row-blue flex justify-between items-center p-2.5 rounded-lg hover:bg-blue-950/30 transition-all cursor-pointer group">
+              <span class="text-slate-400 text-sm flex items-center gap-2">
+                <i class="fas fa-calendar-alt text-blue-400"></i>
+                Registered
+              </span>
+              <span class="flex items-center gap-2">
+                October 7, 2025
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Blockchain Hash with Animated Background -->
+        <div class="bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-lg p-5 border border-blue-400/30 relative overflow-hidden group">
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 pointer-events-none"></div>
+          
+          <div class="flex items-center space-x-2 mb-3 relative z-10">
+            <i class="fas fa-cube text-blue-400 text-lg animate-pulse"></i>
+            <span class="text-sm font-medium text-blue-400">Blockchain Hash</span>
+            <span class="ml-auto flex items-center gap-1 text-xs text-green-400">
+              <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+              Live on Chain
+            </span>
+          </div>
+          
+          <div class="font-mono text-xs text-blue-400 break-all leading-relaxed mb-4 relative z-10 p-3 bg-slate-900/50 rounded border border-blue-500/20">
+            0x7d4a8f9c2e1b5a3d8f6e4c9a2b7e5f1c3d6a9b2e4f7c
+          </div>
+          
+          <div class="flex gap-2 mb-4 relative z-10">
+            <button class="flex-1 text-xs bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 py-2 px-3 rounded transition-all border border-blue-500/30 hover:border-blue-500/50">
+              <i class="fas fa-copy mr-1"></i> Copy Hash
+            </button>
+            <button class="flex-1 text-xs bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 py-2 px-3 rounded transition-all border border-blue-500/30 hover:border-blue-500/50">
+              <i class="fas fa-external-link-alt mr-1"></i> View on Explorer
+            </button>
+          </div>
+          
+          <!-- Mini Stats Grid -->
+          <div class="grid grid-cols-3 gap-3 pt-3 border-t border-blue-400/20 relative z-10">
+            <div class="text-center group cursor-pointer">
+              <div class="text-xs text-slate-400 mb-1">Block Height</div>
+              <div class="text-sm font-bold text-blue-400 counter group-hover:scale-110 transition-transform" data-target="892374">0</div>
+            </div>
+            <div class="text-center group cursor-pointer">
+              <div class="text-xs text-slate-400 mb-1">Confirmations</div>
+              <div class="text-sm font-bold text-blue-500 counter group-hover:scale-110 transition-transform" data-target="2847">0</div>
+            </div>
+            <div class="text-center group cursor-pointer">
+              <div class="text-xs text-slate-400 mb-1">Gas Used</div>
+              <div class="text-sm font-bold text-blue-300 counter group-hover:scale-110 transition-transform" data-target="21000">0</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-2 gap-3 mt-4">
+          <button class="flex items-center justify-center gap-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 py-3 px-4 rounded-lg transition-all border border-blue-500/30 hover:border-blue-500/50 group">
+            <i class="fas fa-download group-hover:animate-bounce"></i>
+            <span class="text-sm font-medium">Download</span>
+          </button>
+          <button class="flex items-center justify-center gap-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 py-3 px-4 rounded-lg transition-all border border-blue-500/30 hover:border-blue-500/50 group">
+            <i class="fas fa-share-alt group-hover:animate-pulse"></i>
+            <span class="text-sm font-medium">Share</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Floating Decorative Elements -->
+      <div class="floating-element floating-element-1"></div>
+      <div class="floating-element floating-element-2"></div>
+      <div class="floating-element floating-element-3"></div>
+    </div>
+  </div>
+  
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 scroll-indicator opacity-0" style="z-index: 10;">
+    <div class="flex flex-col items-center gap-2 cursor-pointer" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
+      <span class="text-slate-400 text-sm">Scroll to explore</span>
+      <div class="w-6 h-10 border-2 border-blue-400/50 rounded-full flex items-start justify-center p-2">
+        <div class="w-1 h-3 bg-blue-400 rounded-full animate-bounce"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 3D Earth Globe Section - Globe Focused -->
+<section class="section-padding bg-slate-950 relative overflow-hidden" style="position: relative; z-index: 20;">
+  <div class="absolute inset-0 bg-gradient-to-b from-blue-950/20 to-slate-950"></div>
+  
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-center">
+      
+      <!-- Left Side Content - Compact -->
+      <div class="lg:col-span-1 space-y-3" data-aos="fade-right">
+        <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 rounded-full px-2.5 py-1">
+          <i class="fas fa-globe-asia text-blue-400 text-xs"></i>
+          <span class="text-blue-300 text-xs font-medium">Global Network</span>
+        </div>
+
+        <h2 class="text-2xl md:text-3xl font-display font-bold text-white leading-tight">
+          Serving Kerala, India
+        </h2>
+
+        <p class="text-sm text-slate-300 leading-relaxed">
+          Blockchain-powered land management ensuring secure, transparent property registration.
+        </p>
+
+        <div class="grid grid-cols-2 gap-3 pt-2">
+          <div class="bg-slate-900/40 backdrop-blur p-3 rounded-lg border border-blue-500/20">
+            <div class="text-xl font-bold text-blue-400 counter" data-target="10234">0</div>
+            <div class="text-slate-400 text-xs">Properties</div>
+          </div>
+          <div class="bg-slate-900/40 backdrop-blur p-3 rounded-lg border border-blue-500/20">
+            <div class="text-xl font-bold text-blue-400 counter" data-target="14">0</div>
+            <div class="text-slate-400 text-xs">Districts</div>
+          </div>
+        </div>
+
+        <div class="pt-3">
+          <a href="#services" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-lg">
+            Get Started
+            <i class="fas fa-arrow-right text-xs"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Side - 3D Earth Globe (No boundaries) -->
+      <div class="lg:col-span-2 relative" data-aos="fade-left">
+        <div id="earth-globe-container" class="w-full h-[600px] lg:h-[700px] relative overflow-hidden">
+          <canvas id="earth-globe-canvas" class="w-full h-full block"></canvas>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<style>
+/* Strict containment for globe without visible boundaries */
+#earth-globe-container {
+  contain: layout style paint;
+  isolation: isolate;
+  -webkit-mask-image: radial-gradient(circle, black 70%, transparent 100%);
+  mask-image: radial-gradient(circle, black 70%, transparent 100%);
+}
+
+#earth-globe-canvas {
+  position: relative;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  #earth-globe-container {
+    height: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  #earth-globe-container {
+    height: 450px;
+  }
+}
+</style>
+
+<script>
+// Update your Three.js renderer setup with proper sizing and shadow fixes
+const container = document.getElementById('earth-globe-container');
+const canvas = document.getElementById('earth-globe-canvas');
+
+if (container && canvas) {
+  const renderer = new THREE.WebGLRenderer({ 
+    canvas: canvas,
+    antialias: true,
+    alpha: true
+  });
+
+  // Proper sizing based on container
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+  renderer.setSize(width, height, false);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  
+  // If using shadows, fix shadow bias to prevent artifacts
+  if (renderer.shadowMap) {
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  }
+  
+  // For any lights with shadows, adjust bias
+  // directionalLight.shadow.normalBias = 0.05;
+  // directionalLight.shadow.bias = -0.0001;
+
+  // Responsive resize handler
+  window.addEventListener('resize', () => {
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    
+    renderer.setSize(width, height, false);
+  });
+}
+</script>
+
+
+<!-- Services Section -->
+<section id="services" class="section-padding bg-slate-900/95 backdrop-blur-md relative" style="z-index: 20; position: relative;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16" data-aos="fade-up" data-aos-duration="1000">
+      <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-2 mb-4">
+        <i class="fas fa-concierge-bell text-blue-400"></i>
+        <span class="text-blue-300 text-sm font-medium">Our Services</span>
+      </div>
+      <h2 class="text-4xl font-display font-bold text-white mb-4">
+        Comprehensive Solutions
+      </h2>
+      <p class="text-xl text-slate-200 max-w-3xl mx-auto">
+        Blockchain-based land management solutions for modern property transactions with enhanced security and transparency.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+      <div class="service-card bg-slate-800/90 backdrop-blur-lg p-8 rounded-xl shadow-xl transform hover:-translate-y-2 transition-all duration-500 border border-blue-500/40 relative overflow-hidden group" data-aos="fade-right" data-aos-delay="100" data-aos-duration="1000">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        
+        <div class="relative z-10">
+          <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+            <i class="fas fa-user text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-4 group-hover:text-blue-300 transition-colors">Property Owner Services</h3>
+          <p class="text-slate-300 mb-6 text-sm leading-relaxed">
+            Complete property management solutions for landowners including registration, transfers, and document management with blockchain security.
+          </p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center text-slate-200 group/item hover:translate-x-2 transition-transform">
+              <i class="fas fa-check-circle text-blue-400 mr-3 text-lg group-hover/item:scale-125 transition-transform"></i>
+              <span>Property Registration & Verification</span>
+            </li>
+            <li class="flex items-center text-slate-200 group/item hover:translate-x-2 transition-transform">
+              <i class="fas fa-check-circle text-blue-400 mr-3 text-lg group-hover/item:scale-125 transition-transform"></i>
+              <span>Secure Ownership Transfer</span>
+            </li>
+            <li class="flex items-center text-slate-200 group/item hover:translate-x-2 transition-transform">
+              <i class="fas fa-check-circle text-blue-400 mr-3 text-lg group-hover/item:scale-125 transition-transform"></i>
+              <span>Digital Document Management</span>
+            </li>
+            <li class="flex items-center text-slate-200 group/item hover:translate-x-2 transition-transform">
+              <i class="fas fa-check-circle text-blue-400 mr-3 text-lg group-hover/item:scale-125 transition-transform"></i>
+              <span>Instant Certificate Download</span>
+            </li>
+          </ul>
+          <a href="#" class="btn-secondary-blue w-full text-center group/btn inline-block relative overflow-hidden">
+            <span class="relative z-10">Access Portal</span>
+            <i class="fas fa-arrow-right ml-2 relative z-10 transform group-hover/btn:translate-x-1 transition-transform"></i>
+            <div class="absolute inset-0 bg-blue-500 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
+          </a>
+        </div>
+      </div>
+      
+      <div class="service-card bg-slate-800/90 backdrop-blur-lg p-8 rounded-xl shadow-xl transform hover:-translate-y-2 transition-all duration-500 border border-blue-500/40 relative overflow-hidden group" data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        
+        <div class="relative z-10">
+          <div class="w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+            <i class="fas fa-stamp text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-4 group-hover:text-blue-300 transition-colors">Professional Services</h3>
+          <p class="text-slate-300 mb-6 text-sm leading-relaxed">
+            Advanced tools for legal professionals and registrars to manage, verify, and process property transactions efficiently with complete audit trails.
+          </p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center text-slate-200 group/item hover:translate-x-2 transition-transform">
+              <i class="fas fa-check-circle text-blue-400 mr-3 text-lg group-hover/item:scale-125 transition-transform"></i>
+              <span>Advanced Document Verification</span>
+            </li>
+            <li class="flex items-center text-slate-200 group/item hover:translate-x-2 transition-transform">
+              <i class="fas fa-check-circle text-blue-400 mr-3 text-lg group-hover/item:scale-125 transition-transform"></i>
+              <span>Real-time Transaction Processing</span>
+            </li>
+            <li class="flex items-center text-slate-200 group/item hover:translate-x-2 transition-transform">
+              <i class="fas fa-check-circle text-blue-400 mr-3 text-lg group-hover/item:scale-125 transition-transform"></i>
+              <span>Automated Compliance Management</span>
+            </li>
+            <li class="flex items-center text-slate-200 group/item hover:translate-x-2 transition-transform">
+              <i class="fas fa-check-circle text-blue-400 mr-3 text-lg group-hover/item:scale-125 transition-transform"></i>
+              <span>Comprehensive Audit & Reporting</span>
+            </li>
+          </ul>
+          <a href="{% url 'registrar_login' %}" class="btn-secondary-blue w-full text-center group/btn inline-block relative overflow-hidden">
+            <span class="relative z-10">Professional Access</span>
+            <i class="fas fa-arrow-right ml-2 relative z-10 transform group-hover/btn:translate-x-1 transition-transform"></i>
+            <div class="absolute inset-0 bg-blue-500 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Additional Service Features -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-5xl mx-auto">
+      <div class="text-center p-6 bg-slate-800/50 rounded-xl border border-blue-500/20 hover:border-blue-500/40 transition-all group" data-aos="fade-up" data-aos-delay="300">
+        <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+          <i class="fas fa-mobile-alt text-blue-400 text-xl"></i>
+        </div>
+        <h4 class="text-white font-semibold mb-2">Mobile Access</h4>
+        <p class="text-slate-400 text-sm">Access your properties anywhere, anytime from any device</p>
+      </div>
+      <div class="text-center p-6 bg-slate-800/50 rounded-xl border border-blue-500/20 hover:border-blue-500/40 transition-all group" data-aos="fade-up" data-aos-delay="400">
+        <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+          <i class="fas fa-bell text-blue-400 text-xl"></i>
+        </div>
+        <h4 class="text-white font-semibold mb-2">Real-time Alerts</h4>
+        <p class="text-slate-400 text-sm">Get instant notifications for all property activities</p>
+      </div>
+      <div class="text-center p-6 bg-slate-800/50 rounded-xl border border-blue-500/20 hover:border-blue-500/40 transition-all group" data-aos="fade-up" data-aos-delay="500">
+        <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+          <i class="fas fa-headset text-blue-400 text-xl"></i>
+        </div>
+        <h4 class="text-white font-semibold mb-2">24/7 Support</h4>
+        <p class="text-slate-400 text-sm">Expert assistance available round the clock</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 3D Blockchain Visualization Section -->
+<section class="section-padding bg-slate-950 relative overflow-hidden" style="position: relative; z-index: 20;">
+  <div class="absolute inset-0 opacity-20">
+    <canvas id="blockchain-network-3d" class="w-full h-full"></canvas>
+  </div>
+  
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center mb-12" data-aos="fade-up">
+      <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-2 mb-4">
+        <i class="fas fa-cube text-blue-400"></i>
+        <span class="text-blue-300 text-sm font-medium">Live Blockchain Network</span>
+      </div>
+      <h2 class="text-4xl font-display font-bold text-white mb-4">
+        Real-Time Network Visualization
+      </h2>
+      <p class="text-xl text-slate-300">
+        Watch the blockchain network in action with live 3D visualization
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="text-center p-6 bg-slate-900/50 backdrop-blur-lg rounded-xl border border-blue-500/20" data-aos="fade-up" data-aos-delay="100">
+        <i class="fas fa-cubes text-blue-400 text-3xl mb-3"></i>
+        <div class="text-2xl font-bold text-blue-400 counter" data-target="15234">0</div>
+        <div class="text-sm text-slate-400 mt-1">Total Blocks</div>
+      </div>
+      <div class="text-center p-6 bg-slate-900/50 backdrop-blur-lg rounded-xl border border-blue-500/20" data-aos="fade-up" data-aos-delay="200">
+        <i class="fas fa-network-wired text-blue-400 text-3xl mb-3"></i>
+        <div class="text-2xl font-bold text-blue-400 counter" data-target="42">0</div>
+        <div class="text-sm text-slate-400 mt-1">Active Nodes</div>
+      </div>
+      <div class="text-center p-6 bg-slate-900/50 backdrop-blur-lg rounded-xl border border-blue-500/20" data-aos="fade-up" data-aos-delay="300">
+        <i class="fas fa-exchange-alt text-blue-400 text-3xl mb-3"></i>
+        <div class="text-2xl font-bold text-blue-400 counter" data-target="8934">0</div>
+        <div class="text-sm text-slate-400 mt-1">Transactions</div>
+      </div>
+      <div class="text-center p-6 bg-slate-900/50 backdrop-blur-lg rounded-xl border border-blue-500/20" data-aos="fade-up" data-aos-delay="400">
+        <i class="fas fa-tachometer-alt text-blue-400 text-3xl mb-3"></i>
+        <div class="text-2xl font-bold text-blue-400">99.9%</div>
+        <div class="text-sm text-slate-400 mt-1">Uptime</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Live Network Stats Bar -->
+<section class="bg-slate-950 border-y border-blue-500/20 relative overflow-hidden" style="z-index: 20; position: relative;">
+  <div class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent animate-shimmer"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div class="network-stat-item">
+        <div class="flex items-center justify-center gap-2 mb-1">
+          <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span class="text-xs text-slate-400">Network Status</span>
+        </div>
+        <div class="text-lg font-bold text-green-400">Online</div>
+      </div>
+      <div class="network-stat-item">
+        <div class="text-xs text-slate-400 mb-1">Transactions Today</div>
+        <div class="text-lg font-bold text-blue-400 counter" data-target="1247">0</div>
+      </div>
+      <div class="network-stat-item">
+        <div class="text-xs text-slate-400 mb-1">Active Users</div>
+        <div class="text-lg font-bold text-blue-400 counter" data-target="8934">0</div>
+      </div>
+      <div class="network-stat-item">
+        <div class="text-xs text-slate-400 mb-1">Avg. Processing Time</div>
+        <div class="text-lg font-bold text-blue-400">2.3s</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3D Carousel Section -->
+<section class="py-20 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-950 relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10 pointer-events-none">
+    <div class="absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-600 rounded-full filter blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500 rounded-full filter blur-3xl opacity-20 animate-pulse" style="animation-delay: 2s;"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-4">
+    
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-full px-6 py-2 mb-6 backdrop-blur-sm">
+        <i class="fas fa-star text-blue-400 animate-pulse"></i>
+        <span class="text-blue-300 text-sm font-medium tracking-wide">Why Choose Us</span>
+      </div>
+      <h2 class="text-5xl md:text-6xl font-bold text-white mb-6 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+        Kerala BLMS Advantages
+      </h2>
+      <p class="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+        Revolutionary blockchain technology meets professional service for <span class="text-blue-400 font-semibold">secure</span> and <span class="text-blue-400 font-semibold">efficient</span> land management
+      </p>
+    </div>
+
+    <!-- Carousel Container -->
+    <div class="relative" style="perspective: 1200px; perspective-origin: 50% 50%;">
+      <div class="relative w-full h-[500px] md:h-[550px]" style="transform-style: preserve-3d;" id="carouselWrapper">
+        
+        <!-- Card 1: Blockchain Security -->
+        <div class="carousel-card absolute left-1/2 top-1/2 w-[320px] md:w-[400px] h-[500px]" style="transform-style: preserve-3d; backface-visibility: hidden;" data-index="0">
+          <div class="w-full h-full rounded-3xl p-8 overflow-y-auto bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-2xl border-2 border-blue-400/30 shadow-[0_20px_80px_rgba(59,130,246,0.3)] relative group">
+            <div class="absolute inset-0 bg-gradient-to-b from-blue-500/5 via-blue-500/10 to-blue-600/20 translate-y-full group-hover:translate-y-0 transition-transform duration-700 rounded-3xl"></div>
+            <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 rounded-full filter blur-2xl"></div>
+            <div class="relative z-10 text-center">
+              <div class="w-24 h-24 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-[0_10px_40px_rgba(59,130,246,0.4)] transform hover:rotate-12 transition-all duration-500 group-hover:scale-110 group-hover:shadow-[0_15px_60px_rgba(59,130,246,0.6)]">
+                <i class="fas fa-shield-alt text-white text-4xl drop-shadow-lg"></i>
+              </div>
+              <h3 class="text-3xl font-bold text-white mb-5 tracking-tight">Blockchain Security</h3>
+              <p class="text-slate-200 mb-6 leading-relaxed text-base">
+                <span class="font-semibold text-blue-300">Immutable records</span> and cryptographic security ensure complete protection of your property data with <span class="text-blue-400">military-grade encryption</span>.
+              </p>
+              <div class="flex items-center justify-center gap-3 text-blue-300 text-sm bg-gradient-to-r from-blue-500/15 to-blue-600/15 border border-blue-400/30 rounded-full px-5 py-3 inline-flex mb-8 shadow-lg">
+                <i class="fas fa-lock text-lg"></i>
+                <span class="font-semibold">256-bit Encryption</span>
+              </div>
+              <div class="pt-6 border-t border-blue-400/20">
+                <p class="text-slate-300 text-sm leading-relaxed">
+                  Every transaction is <span class="text-blue-300 font-medium">permanently recorded</span> on the blockchain, creating an unalterable history that guarantees authenticity and prevents fraud.
+                </p>
+              </div>
+              <div class="mt-6 flex items-center justify-center gap-6 text-slate-400 text-xs">
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-check-circle text-green-400"></i>
+                  <span>99.9% Uptime</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-check-circle text-green-400"></i>
+                  <span>ISO Certified</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Fast Processing -->
+        <div class="carousel-card absolute left-1/2 top-1/2 w-[320px] md:w-[400px] h-[500px]" style="transform-style: preserve-3d; backface-visibility: hidden;" data-index="1">
+          <div class="w-full h-full rounded-3xl p-8 overflow-y-auto bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-2xl border-2 border-purple-400/30 shadow-[0_20px_80px_rgba(168,85,247,0.3)] relative group">
+            <div class="absolute inset-0 bg-gradient-to-b from-purple-500/5 via-purple-500/10 to-purple-600/20 translate-y-full group-hover:translate-y-0 transition-transform duration-700 rounded-3xl"></div>
+            <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full filter blur-2xl"></div>
+            <div class="relative z-10 text-center">
+              <div class="w-24 h-24 bg-gradient-to-br from-purple-400 via-purple-500 to-pink-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-[0_10px_40px_rgba(168,85,247,0.4)] transform hover:rotate-12 transition-all duration-500 group-hover:scale-110 group-hover:shadow-[0_15px_60px_rgba(168,85,247,0.6)]">
+                <i class="fas fa-bolt text-white text-4xl drop-shadow-lg"></i>
+              </div>
+              <h3 class="text-3xl font-bold text-white mb-5 tracking-tight">Lightning Fast</h3>
+              <p class="text-slate-200 mb-6 leading-relaxed text-base">
+                <span class="font-semibold text-purple-300">Streamlined workflows</span> and AI-powered automation reduce registration time from <span class="line-through text-slate-500">days</span> to <span class="text-purple-400 font-bold">minutes</span>.
+              </p>
+              <div class="flex items-center justify-center gap-3 text-purple-300 text-sm bg-gradient-to-r from-purple-500/15 to-pink-500/15 border border-purple-400/30 rounded-full px-5 py-3 inline-flex mb-8 shadow-lg">
+                <i class="fas fa-rocket text-lg"></i>
+                <span class="font-semibold">2.3s Average Response</span>
+              </div>
+              <div class="pt-6 border-t border-purple-400/20">
+                <p class="text-slate-300 text-sm leading-relaxed">
+                  Our <span class="text-purple-300 font-medium">intelligent automation system</span> processes applications in real-time, eliminating paperwork delays and providing instant confirmations.
+                </p>
+              </div>
+              <div class="mt-6 flex items-center justify-center gap-6 text-slate-400 text-xs">
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-check-circle text-green-400"></i>
+                  <span>24/7 Processing</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-check-circle text-green-400"></i>
+                  <span>Zero Downtime</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Full Transparency -->
+        <div class="carousel-card absolute left-1/2 top-1/2 w-[320px] md:w-[400px] h-[500px]" style="transform-style: preserve-3d; backface-visibility: hidden;" data-index="2">
+          <div class="w-full h-full rounded-3xl p-8 overflow-y-auto bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-2xl border-2 border-cyan-400/30 shadow-[0_20px_80px_rgba(34,211,238,0.3)] relative group">
+            <div class="absolute inset-0 bg-gradient-to-b from-cyan-500/5 via-cyan-500/10 to-cyan-600/20 translate-y-full group-hover:translate-y-0 transition-transform duration-700 rounded-3xl"></div>
+            <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/20 rounded-full filter blur-2xl"></div>
+            <div class="relative z-10 text-center">
+              <div class="w-24 h-24 bg-gradient-to-br from-cyan-400 via-cyan-500 to-blue-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-[0_10px_40px_rgba(34,211,238,0.4)] transform hover:rotate-12 transition-all duration-500 group-hover:scale-110 group-hover:shadow-[0_15px_60px_rgba(34,211,238,0.6)]">
+                <i class="fas fa-eye text-white text-4xl drop-shadow-lg"></i>
+              </div>
+              <h3 class="text-3xl font-bold text-white mb-5 tracking-tight">Full Transparency</h3>
+              <p class="text-slate-200 mb-6 leading-relaxed text-base">
+                <span class="font-semibold text-cyan-300">Complete visibility</span> into all transactions with detailed audit trails and <span class="text-cyan-400">real-time tracking</span> of every property activity.
+              </p>
+              <div class="flex items-center justify-center gap-3 text-cyan-300 text-sm bg-gradient-to-r from-cyan-500/15 to-blue-500/15 border border-cyan-400/30 rounded-full px-5 py-3 inline-flex mb-8 shadow-lg">
+                <i class="fas fa-chart-line text-lg"></i>
+                <span class="font-semibold">100% Traceable</span>
+              </div>
+              <div class="pt-6 border-t border-cyan-400/20">
+                <p class="text-slate-300 text-sm leading-relaxed">
+                  Track every step of your land registration journey with <span class="text-cyan-300 font-medium">complete transparency</span>. Access full history and documentation anytime, anywhere.
+                </p>
+              </div>
+              <div class="mt-6 flex items-center justify-center gap-6 text-slate-400 text-xs">
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-check-circle text-green-400"></i>
+                  <span>Live Updates</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-check-circle text-green-400"></i>
+                  <span>Full Audit Trail</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <button id="prevBtn" class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-14 h-14 bg-gradient-to-br from-blue-500/30 to-blue-600/30 hover:from-blue-500/50 hover:to-blue-600/50 backdrop-blur-xl border-2 border-blue-400/40 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_35px_rgba(59,130,246,0.8)] active:scale-95">
+        <i class="fas fa-chevron-left text-lg"></i>
+      </button>
+      <button id="nextBtn" class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-14 h-14 bg-gradient-to-br from-blue-500/30 to-blue-600/30 hover:from-blue-500/50 hover:to-blue-600/50 backdrop-blur-xl border-2 border-blue-400/40 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_35px_rgba(59,130,246,0.8)] active:scale-95">
+        <i class="fas fa-chevron-right text-lg"></i>
+      </button>
+      
+      <!-- Progress Dots -->
+      <div class="flex justify-center gap-3 mt-12">
+        <button class="carousel-dot w-3 h-3 rounded-full bg-blue-500/50 hover:bg-blue-400 transition-all duration-300" data-index="0"></button>
+        <button class="carousel-dot w-3 h-3 rounded-full bg-blue-500/50 hover:bg-blue-400 transition-all duration-300" data-index="1"></button>
+        <button class="carousel-dot w-3 h-3 rounded-full bg-blue-500/50 hover:bg-blue-400 transition-all duration-300" data-index="2"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const carouselWrapper = document.getElementById('carouselWrapper');
+  const cards = document.querySelectorAll('.carousel-card');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const dots = document.querySelectorAll('.carousel-dot');
+  
+  let currentIndex = 0;
+  let autoRotateInterval;
+  let isHovering = false;
+  
+  const totalCards = cards.length;
+  const angleStep = 360 / totalCards;
+  const radius = 480;
+  
+  function updateCarousel() {
+    cards.forEach((card, index) => {
+      const angle = angleStep * (index - currentIndex);
+      const angleRad = (angle * Math.PI) / 180;
+      
+      const x = Math.sin(angleRad) * radius;
+      const z = Math.cos(angleRad) * radius - radius;
+      
+      const scale = 1 - Math.abs(z) / (radius * 2);
+      const opacity = Math.max(0.2, scale);
+      
+      card.style.transform = `
+        translate(-50%, -50%)
+        translate3d(${x}px, 0, ${z}px)
+        rotateY(${-angle}deg)
+        scale(${Math.max(0.65, scale)})
+      `;
+      card.style.opacity = opacity;
+      card.style.zIndex = Math.round(scale * 100);
+      card.style.pointerEvents = index === currentIndex ? 'auto' : 'none';
+    });
+    
+    // Update dots
+    dots.forEach((dot, index) => {
+      if (index === currentIndex) {
+        dot.classList.add('bg-blue-400', 'w-8');
+        dot.classList.remove('bg-blue-500/50', 'w-3');
+      } else {
+        dot.classList.remove('bg-blue-400', 'w-8');
+        dot.classList.add('bg-blue-500/50', 'w-3');
+      }
+    });
+  }
+  
+  function rotateCarousel(direction) {
+    currentIndex = (currentIndex + direction + totalCards) % totalCards;
+    updateCarousel();
+  }
+  
+  function goToSlide(index) {
+    currentIndex = index;
+    updateCarousel();
+  }
+  
+  function startAutoRotate() {
+    autoRotateInterval = setInterval(() => {
+      if (!isHovering) {
+        rotateCarousel(1);
+      }
+    }, 4500);
+  }
+  
+  function stopAutoRotate() {
+    clearInterval(autoRotateInterval);
+  }
+  
+  prevBtn.addEventListener('click', () => {
+    rotateCarousel(-1);
+    stopAutoRotate();
+    startAutoRotate();
+  });
+  
+  nextBtn.addEventListener('click', () => {
+    rotateCarousel(1);
+    stopAutoRotate();
+    startAutoRotate();
+  });
+  
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const index = parseInt(dot.getAttribute('data-index'));
+      goToSlide(index);
+      stopAutoRotate();
+      startAutoRotate();
+    });
+  });
+  
+  carouselWrapper.addEventListener('mouseenter', () => {
+    isHovering = true;
+  });
+  
+  carouselWrapper.addEventListener('mouseleave', () => {
+    isHovering = false;
+  });
+  
+  // Touch/Swipe support
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  carouselWrapper.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    isHovering = true;
+  });
+  
+  carouselWrapper.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+    isHovering = false;
+  });
+  
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    if (touchStartX - touchEndX > swipeThreshold) {
+      rotateCarousel(1);
+    } else if (touchEndX - touchStartX > swipeThreshold) {
+      rotateCarousel(-1);
+    }
+    stopAutoRotate();
+    startAutoRotate();
+  }
+  
+  // Initialize
+  updateCarousel();
+  startAutoRotate();
+</script>
+
+<style>
+  .carousel-card {
+    transition: all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  
+  .carousel-dot {
+    transition: all 0.3s ease;
+  }
+  
+  .carousel-card > div {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(59, 130, 246, 0.6) rgba(15, 23, 42, 0.4);
+  }
+  
+  .carousel-card > div::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .carousel-card > div::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 10px;
+  }
+  
+  .carousel-card > div::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, rgba(59, 130, 246, 0.8), rgba(147, 51, 234, 0.8));
+    border-radius: 10px;
+  }
+  
+  .carousel-card > div::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, rgba(59, 130, 246, 1), rgba(147, 51, 234, 1));
+  }
+</style>
+
+    
+    
+
+<!-- Process Timeline -->
+<section class="section-padding bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 relative overflow-hidden" style="position: relative; z-index: 20;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-2 mb-4">
+        <i class="fas fa-route text-blue-400"></i>
+        <span class="text-blue-300 text-sm font-medium">Process</span>
+      </div>
+      <h2 class="text-4xl font-display font-bold text-white mb-4">
+        How It Works
+      </h2>
+      <p class="text-xl text-slate-300">
+        Simple four-step process to register your property on blockchain
+      </p>
+    </div>
+    
+    <div class="relative">
+      <div class="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 transform -translate-y-1/2"></div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+        <div class="text-center group" data-aos="fade-up" data-aos-delay="100">
+          <div class="relative inline-block mb-6">
+            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto shadow-2xl group-hover:scale-110 transition-transform relative z-10">
+              <i class="fas fa-upload text-white text-2xl"></i>
+            </div>
+            <div class="absolute inset-0 bg-blue-500 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+            <div class="absolute -top-2 -right-2 w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Upload Documents</h3>
+          <p class="text-slate-400 text-sm">Submit your property documents securely</p>
+        </div>
+        
+        <div class="text-center group" data-aos="fade-up" data-aos-delay="200">
+          <div class="relative inline-block mb-6">
+            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto shadow-2xl group-hover:scale-110 transition-transform relative z-10">
+              <i class="fas fa-search text-white text-2xl"></i>
+            </div>
+            <div class="absolute inset-0 bg-blue-500 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+            <div class="absolute -top-2 -right-2 w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">AI Verification</h3>
+          <p class="text-slate-400 text-sm">Automated document verification process</p>
+        </div>
+        
+        <div class="text-center group" data-aos="fade-up" data-aos-delay="300">
+          <div class="relative inline-block mb-6">
+            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto shadow-2xl group-hover:scale-110 transition-transform relative z-10">
+              <i class="fas fa-cube text-white text-2xl"></i>
+            </div>
+            <div class="absolute inset-0 bg-blue-500 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+            <div class="absolute -top-2 -right-2 w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Blockchain Storage</h3>
+          <p class="text-slate-400 text-sm">Data encrypted and stored on blockchain</p>
+        </div>
+        
+        <div class="text-center group" data-aos="fade-up" data-aos-delay="400">
+          <div class="relative inline-block mb-6">
+            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto shadow-2xl group-hover:scale-110 transition-transform relative z-10">
+              <i class="fas fa-certificate text-white text-2xl"></i>
+            </div>
+            <div class="absolute inset-0 bg-blue-500 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+            <div class="absolute -top-2 -right-2 w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Get Certificate</h3>
+          <p class="text-slate-400 text-sm">Receive your digital property certificate</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="section-padding bg-slate-950 relative" style="position: relative; z-index: 20;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-2 mb-4">
+        <i class="fas fa-quote-left text-blue-400"></i>
+        <span class="text-blue-300 text-sm font-medium">Testimonials</span>
+      </div>
+      <h2 class="text-4xl font-display font-bold text-white mb-4">
+        What Our Clients Say
+      </h2>
+      <p class="text-xl text-slate-300">
+        Trusted by thousands of property owners across Kerala
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-slate-900/50 backdrop-blur-lg p-8 rounded-2xl border border-blue-500/20 hover:border-blue-500/40 transition-all group" data-aos="fade-up" data-aos-delay="100">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+            SK
+          </div>
+          <div>
+            <h4 class="text-white font-semibold">Suresh Kumar</h4>
+            <div class="flex text-yellow-400 text-sm">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="text-slate-300 text-sm italic">
+          "The blockchain-based system made property registration incredibly simple and secure. Completed everything in just 30 minutes!"
+        </p>
+      </div>
+      
+      <div class="bg-slate-900/50 backdrop-blur-lg p-8 rounded-2xl border border-blue-500/20 hover:border-blue-500/40 transition-all group" data-aos="fade-up" data-aos-delay="200">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+            PM
+          </div>
+          <div>
+            <h4 class="text-white font-semibold">Priya Menon</h4>
+            <div class="flex text-yellow-400 text-sm">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="text-slate-300 text-sm italic">
+          "Outstanding service! The transparency and security provided by this platform gave me complete peace of mind."
+        </p>
+      </div>
+      
+      <div class="bg-slate-900/50 backdrop-blur-lg p-8 rounded-2xl border border-blue-500/20 hover:border-blue-500/40 transition-all group" data-aos="fade-up" data-aos-delay="300">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+            AN
+          </div>
+          <div>
+            <h4 class="text-white font-semibold">Anil Nair</h4>
+            <div class="flex text-yellow-400 text-sm">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="text-slate-300 text-sm italic">
+          "Professional team and cutting-edge technology. This is the future of land management systems in India!"
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA with Parallax -->
+<section class="section-padding bg-gradient-to-br from-blue-600 via-blue-500 to-blue-600 text-white relative overflow-hidden" style="position: relative; z-index: 20;">
+  <div class="absolute inset-0 opacity-10">
+    <div class="cta-pattern-blue"></div>
+  </div>
+  
+  <div class="absolute top-10 left-10 w-20 h-20 border-4 border-white/20 rounded-full animate-ping"></div>
+  <div class="absolute bottom-10 right-10 w-32 h-32 border-4 border-white/20 rounded-full animate-pulse"></div>
+  
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10" data-aos="zoom-in" data-aos-duration="1000">
+    <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-lg border border-white/20 rounded-full px-4 py-2 mb-6">
+      <i class="fas fa-rocket text-white"></i>
+      <span class="text-white text-sm font-medium">Get Started Today</span>
+    </div>
+    <h2 class="text-5xl font-display font-bold text-white mb-6">
+      Ready to Get Started?
+    </h2>
+    <p class="text-xl text-blue-50 mb-10 max-w-2xl mx-auto">
+      Experience the future of property management with our secure, efficient blockchain-based system. Join thousands of satisfied customers.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="200">
+      <a href="#contact" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold shadow-2xl hover:bg-blue-50 transition-all group inline-flex items-center justify-center gap-2">
+        <i class="fas fa-calendar-check"></i>
+        Schedule Consultation
+        <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+      </a>
+      <a href="#services" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all group inline-flex items-center justify-center gap-2">
+        <i class="fas fa-compass"></i>
+        Explore Services
+        <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+      </a>
+    </div>
+    
+    <div class="flex items-center justify-center gap-8 mt-12 flex-wrap">
+      <div class="flex items-center gap-2 text-white/80">
+        <i class="fas fa-check-circle text-white text-lg"></i>
+        <span class="text-sm">No Setup Fees</span>
+      </div>
+      <div class="flex items-center gap-2 text-white/80">
+        <i class="fas fa-check-circle text-white text-lg"></i>
+        <span class="text-sm">Free Support</span>
+      </div>
+      <div class="flex items-center gap-2 text-white/80">
+        <i class="fas fa-check-circle text-white text-lg"></i>
+        <span class="text-sm">Money Back Guarantee</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- CDN Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+<style>
+/* Blue Theme Styles */
+.btn-primary-blue {
+  background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 100%);
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(49, 130, 206, 0.4);
+  position: relative;
+}
+
+.btn-primary-blue:hover {
+  box-shadow: 0 6px 25px rgba(49, 130, 206, 0.6);
+  transform: translateY(-2px);
+}
+
+.btn-secondary-blue {
+  background: rgba(49, 130, 206, 0.1);
+  border: 2px solid #3182ce;
+  color: #3182ce;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.btn-secondary-blue:hover {
+  background: #3182ce;
+  color: white;
+  border-color: #2c5aa0;
+}
+
+.card-glass-blue {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 1rem;
+  padding: 2rem;
+  position: relative;
+}
+
+.shadow-blue {
+  box-shadow: 0 8px 32px rgba(49, 130, 206, 0.15);
+}
+
+.orbs-container { 
+  z-index: 1; 
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  animation: float 20s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #3182ce, transparent);
+  top: -100px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #2c5aa0, transparent);
+  bottom: -50px;
+  right: -50px;
+  animation-delay: 7s;
+}
+
+.orb-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, #60a5fa, transparent);
+  top: 50%;
+  left: 50%;
+  animation-delay: 14s;
+}
+
+.orb-4 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, #3b82f6, transparent);
+  top: 20%;
+  right: 20%;
+  animation-delay: 3s;
+}
+
+.orb-5 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #2563eb, transparent);
+  bottom: 30%;
+  left: 30%;
+  animation-delay: 10s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.1); }
+  66% { transform: translate(-30px, 30px) scale(0.9); }
+}
+
+.floating-element {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.floating-element-1 {
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(49, 130, 206, 0.3), transparent);
+  top: 10%;
+  right: -50px;
+  animation: floatSlow 8s ease-in-out infinite;
+}
+
+.floating-element-2 {
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.3), transparent);
+  bottom: 20%;
+  left: -40px;
+  animation: floatSlow 6s ease-in-out infinite 1s;
+}
+
+.floating-element-3 {
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent);
+  top: 50%;
+  right: -30px;
+  animation: floatSlow 7s ease-in-out infinite 2s;
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.corner-accent {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #3182ce;
+  pointer-events: none;
+}
+
+.corner-tl {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner-tr {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.corner-bl {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.corner-br {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+.holographic-overlay {
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(49, 130, 206, 0.1) 50%,
+    transparent 70%
+  );
+  background-size: 200% 200%;
+  animation: holographic 3s ease-in-out infinite;
+}
+
+@keyframes holographic {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.border-animated-blue {
+  background: linear-gradient(90deg, #3182ce, #60a5fa, #3182ce);
+  background-size: 200% 100%;
+  animation: borderFlow 3s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 2px;
+}
+
+@keyframes borderFlow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+.scan-line-blue {
+  animation: scan 3s ease-in-out infinite;
+}
+
+@keyframes scan {
+  0%, 100% { transform: translateY(0); opacity: 0; }
+  50% { transform: translateY(400%); opacity: 1; }
+}
+
+.pulse-badge-blue {
+  animation: pulseBlue 2s ease-in-out infinite;
+}
+
+@keyframes pulseBlue {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(49, 130, 206, 0.7); }
+  50% { box-shadow: 0 0 0 10px rgba(49, 130, 206, 0); }
+}
+
+.property-row-blue {
+  position: relative;
+  overflow: hidden;
+}
+
+.property-row-blue::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(49, 130, 206, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.property-row-blue:hover::before {
+  left: 100%;
+}
+
+.cta-pattern-blue {
+  background-image: 
+    linear-gradient(30deg, #3182ce 12%, transparent 12.5%, transparent 87%, #3182ce 87.5%, #3182ce),
+    linear-gradient(150deg, #3182ce 12%, transparent 12.5%, transparent 87%, #3182ce 87.5%, #3182ce),
+    linear-gradient(30deg, #3182ce 12%, transparent 12.5%, transparent 87%, #3182ce 87.5%, #3182ce),
+    linear-gradient(150deg, #3182ce 12%, transparent 12.5%, transparent 87%, #3182ce 87.5%, #3182ce);
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px;
+}
+
+.service-card, .feature-card, .document-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.network-stat-item {
+  transition: all 0.3s ease;
+}
+
+.network-stat-item:hover {
+  transform: translateY(-2px);
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 3s infinite;
+}
+
+.scroll-indicator {
+  animation: fadeInUp 1s ease 2s forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+section {
+  position: relative;
+}
+
+/* Earth Globe Container */
+#earth-globe-container {
+  position: relative;
+  filter: drop-shadow(0 0 30px rgba(49, 130, 206, 0.4));
+}
+
+#earth-globe-canvas {
+  border-radius: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  #earth-globe-container {
+    height: 500px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  #earth-globe-container {
+    height: 400px !important;
+  }
+}
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Kerala BLMS with Enhanced 3D Initializing...');
+  
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+  
+  AOS.init({
+    duration: 1000,
+    once: true,
+    offset: 100,
+    easing: 'ease-out-cubic'
+  });
+  
+  // ==========================================
+  // LENIS SMOOTH SCROLL
+  // ==========================================
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smooth: true,
+    smoothTouch: false,
+  });
+  
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+  
+  lenis.on('scroll', ScrollTrigger.update);
+  
+  gsap.ticker.add((time)=>{
+    lenis.raf(time * 1000);
+  });
+  
+  gsap.ticker.lagSmoothing(0);
+  
+  // ==========================================
+  // HERO ANIMATIONS
+  // ==========================================
+  const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+  
+  heroTl
+    .from(".hero-badge", {
+      opacity: 0,
+      y: -20,
+      duration: 0.8,
+      delay: 0.2
+    })
+    .from(".hero-title", {
+      y: 100,
+      opacity: 0,
+      duration: 1,
+    }, "-=0.4")
+    .to(".hero-subtitle", {
+      opacity: 1,
+      y: 0,
+      duration: 0.8
+    }, "-=0.5")
+    .to(".hero-buttons", {
+      opacity: 1,
+      y: 0,
+      duration: 0.8
+    }, "-=0.4")
+    .to(".hero-stats", {
+      opacity: 1,
+      y: 0,
+      duration: 0.8
+    }, "-=0.4")
+    .to(".hero-trust", {
+      opacity: 1,
+      y: 0,
+      duration: 0.8
+    }, "-=0.4");
+  
+  // ==========================================
+  // COUNTER ANIMATIONS
+  // ==========================================
+  function animateCounter(element) {
+    const target = parseFloat(element.getAttribute('data-target'));
+    const duration = 2000;
+    const increment = target / (duration / 16);
+    let current = 0;
+    
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        element.textContent = target >= 1000 ? Math.floor(target).toLocaleString() + '+' : target;
+        clearInterval(timer);
+      } else {
+        element.textContent = target >= 1000 ? Math.floor(current).toLocaleString() : current.toFixed(1);
+      }
+    }, 16);
+  }
+  
+  gsap.utils.toArray('.counter').forEach(counter => {
+    ScrollTrigger.create({
+      trigger: counter,
+      start: "top 80%",
+      once: true,
+      onEnter: () => animateCounter(counter)
+    });
+  });
+  // ==========================================
+// 3D EARTH GLOBE - KERALA MARKER (RIGHT SIDE)
+// ==========================================
+const globeCanvas = document.getElementById('earth-globe-canvas');
+if (globeCanvas && typeof THREE !== 'undefined') {
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    50,
+    globeCanvas.offsetWidth / globeCanvas.offsetHeight,
+    0.1,
+    1000
+  );
+  
+  const renderer = new THREE.WebGLRenderer({
+    canvas: globeCanvas,
+    alpha: true,
+    antialias: true
+  });
+  
+  renderer.setSize(globeCanvas.offsetWidth, globeCanvas.offsetHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  camera.position.z = 2.5;
+  
+  // Earth
+  const earthRadius = 1;
+  const earthGeometry = new THREE.SphereGeometry(earthRadius, 64, 64);
+  
+  // Load Earth texture
+  const textureLoader = new THREE.TextureLoader();
+  const earthTexture = textureLoader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_atmos_2048.jpg');
+  
+  const earthMaterial = new THREE.MeshPhongMaterial({
+    map: earthTexture,
+    shininess: 5
+  });
+  
+  const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
+  scene.add(earthMesh);
+  
+  // Wireframe overlay for style
+  const wireframeGeometry = new THREE.SphereGeometry(earthRadius + 0.005, 32, 32);
+  const wireframeMaterial = new THREE.MeshBasicMaterial({
+    color: 0x60a5fa,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.15
+  });
+  const wireframeMesh = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+  scene.add(wireframeMesh);
+  
+  // Grid lines
+  const gridGroup = new THREE.Group();
+  
+  // Latitude lines
+  for (let lat = -80; lat <= 80; lat += 20) {
+    const radius = Math.cos(lat * Math.PI / 180) * earthRadius;
+    const y = Math.sin(lat * Math.PI / 180) * earthRadius;
+    
+    const curve = new THREE.EllipseCurve(0, 0, radius, radius, 0, 2 * Math.PI, false, 0);
+    const points = curve.getPoints(64);
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({
+      color: 0x3182ce,
+      transparent: true,
+      opacity: 0.2
+    });
+    
+    const line = new THREE.Line(geometry, material);
+    line.rotation.x = Math.PI / 2;
+    line.position.y = y;
+    gridGroup.add(line);
+  }
+  
+  // Longitude lines
+  for (let lon = 0; lon < 360; lon += 20) {
+    const curve = new THREE.EllipseCurve(0, 0, earthRadius, earthRadius, 0, 2 * Math.PI, false, 0);
+    const points = curve.getPoints(64);
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({
+      color: 0x3182ce,
+      transparent: true,
+      opacity: 0.2
+    });
+    
+    const line = new THREE.Line(geometry, material);
+    line.rotation.y = lon * Math.PI / 180;
+    gridGroup.add(line);
+  }
+  
+  scene.add(gridGroup);
+  
+  // Kerala Marker - Coordinates: 10.850516°N, 76.271080°E
+  function latLonToVector3(lat, lon, radius) {
+    const phi = (90 - lat) * (Math.PI / 180);
+    const theta = (lon + 180) * (Math.PI / 180);
+    
+    const x = -(radius * Math.sin(phi) * Math.cos(theta));
+    const z = (radius * Math.sin(phi) * Math.sin(theta));
+    const y = (radius * Math.cos(phi));
+    
+    return new THREE.Vector3(x, y, z);
+  }
+  
+  const keralaLat = 10.850516;
+  const keralaLon = 76.271080;
+  const markerHeight = 0.08;
+  const keralaPosition = latLonToVector3(keralaLat, keralaLon, earthRadius + markerHeight);
+  
+  // Create marker pin
+  const pinGeometry = new THREE.ConeGeometry(0.025, 0.1, 8);
+  const pinMaterial = new THREE.MeshBasicMaterial({ 
+    color: 0xff3333,
+    emissive: 0xff3333,
+    emissiveIntensity: 0.5
+  });
+  const pin = new THREE.Mesh(pinGeometry, pinMaterial);
+  pin.position.copy(keralaPosition);
+  pin.lookAt(new THREE.Vector3(0, 0, 0));
+  pin.rotateX(Math.PI);
+  scene.add(pin);
+  
+  // Marker sphere at base of pin
+  const markerSphereGeometry = new THREE.SphereGeometry(0.03, 16, 16);
+  const markerSphereMaterial = new THREE.MeshBasicMaterial({
+    color: 0xff3333,
+    transparent: true,
+    opacity: 0.8
+  });
+  const markerSphere = new THREE.Mesh(markerSphereGeometry, markerSphereMaterial);
+  const surfacePosition = latLonToVector3(keralaLat, keralaLon, earthRadius);
+  markerSphere.position.copy(surfacePosition);
+  scene.add(markerSphere);
+  
+  // Pulsing rings around marker
+  const ringGroup = new THREE.Group();
+  for (let i = 0; i < 3; i++) {
+    const ringGeometry = new THREE.RingGeometry(0.04 + i * 0.025, 0.05 + i * 0.025, 32);
+    const ringMaterial = new THREE.MeshBasicMaterial({
+      color: 0xff6666,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.5 - i * 0.15
+    });
+    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    ring.position.copy(surfacePosition);
+    ring.lookAt(new THREE.Vector3(0, 0, 0));
+    ringGroup.add(ring);
+  }
+  scene.add(ringGroup);
+  
+  // Glow effect
+  const glowGeometry = new THREE.SphereGeometry(earthRadius + 0.08, 32, 32);
+  const glowMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      c: { type: "f", value: 0.4 },
+      p: { type: "f", value: 3.5 }
+    },
+    vertexShader: `
+      uniform float c;
+      uniform float p;
+      varying float intensity;
+      void main() {
+        vec3 vNormal = normalize(normalMatrix * normal);
+        vec3 vNormel = normalize(normalMatrix * vec3(0.0, 0.0, 1.0));
+        intensity = pow(c - dot(vNormal, vNormel), p);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      varying float intensity;
+      void main() {
+        vec3 glow = vec3(0.19, 0.51, 0.81) * intensity;
+        gl_FragColor = vec4(glow, intensity);
+      }
+    `,
+    side: THREE.BackSide,
+    blending: THREE.AdditiveBlending,
+    transparent: true
+  });
+  const glowMesh = new THREE.Mesh(glowGeometry, glowMaterial);
+  scene.add(glowMesh);
+  
+  // Stars
+  const starsGeometry = new THREE.BufferGeometry();
+  const starsMaterial = new THREE.PointsMaterial({
+    color: 0xffffff,
+    size: 0.01,
+    transparent: true,
+    opacity: 0.6
+  });
+  
+  const starsVertices = [];
+  for (let i = 0; i < 2000; i++) {
+    const x = (Math.random() - 0.5) * 100;
+    const y = (Math.random() - 0.5) * 100;
+    const z = (Math.random() - 0.5) * 100;
+    starsVertices.push(x, y, z);
+  }
+  
+  starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
+  const stars = new THREE.Points(starsGeometry, starsMaterial);
+  scene.add(stars);
+  
+  // Lighting
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+  scene.add(ambientLight);
+  
+  const sunLight = new THREE.DirectionalLight(0xffffff, 1);
+  sunLight.position.set(5, 3, 5);
+  scene.add(sunLight);
+  
+  const backLight = new THREE.DirectionalLight(0xffffff, 0.3);
+  backLight.position.set(-5, -3, -5);
+  scene.add(backLight);
+  
+  // Animation
+  let time = 0;
+  const rotationSpeed = 0.002;
+  
+  function animateGlobe() {
+    requestAnimationFrame(animateGlobe);
+    time += 0.01;
+    
+    // Rotate Earth
+    earthMesh.rotation.y += rotationSpeed;
+    wireframeMesh.rotation.y += rotationSpeed;
+    gridGroup.rotation.y += rotationSpeed;
+    glowMesh.rotation.y += rotationSpeed;
+    
+    // Update marker positions
+    const rotationMatrix = new THREE.Matrix4().makeRotationY(earthMesh.rotation.y);
+    
+    const baseSurfacePos = latLonToVector3(keralaLat, keralaLon, earthRadius);
+    const newSurfacePos = baseSurfacePos.clone().applyMatrix4(rotationMatrix);
+    
+    const basePinPos = latLonToVector3(keralaLat, keralaLon, earthRadius + markerHeight);
+    const newPinPos = basePinPos.clone().applyMatrix4(rotationMatrix);
+    
+    markerSphere.position.copy(newSurfacePos);
+    pin.position.copy(newPinPos);
+    pin.lookAt(new THREE.Vector3(0, 0, 0));
+    pin.rotateX(Math.PI);
+    
+    // Update and pulse rings
+    ringGroup.children.forEach((ring, index) => {
+      ring.position.copy(newSurfacePos);
+      ring.lookAt(new THREE.Vector3(0, 0, 0));
+      
+      const scale = 1 + Math.sin(time * 2 + index * 0.8) * 0.3;
+      ring.scale.set(scale, scale, 1);
+      ring.material.opacity = (0.5 - index * 0.15) + Math.sin(time * 2 + index * 0.8) * 0.2;
+    });
+    
+    // Pulse marker
+    const markerScale = 1 + Math.sin(time * 3) * 0.2;
+    markerSphere.scale.set(markerScale, markerScale, markerScale);
+    pin.scale.set(markerScale, markerScale, markerScale);
+    
+    // Rotate stars
+    stars.rotation.y += 0.0001;
+    
+    renderer.render(scene, camera);
+  }
+  
+  animateGlobe();
+  
+  // Handle resize
+  window.addEventListener('resize', () => {
+    const container = document.getElementById('earth-globe-container');
+    if (container) {
+      camera.aspect = container.offsetWidth / container.offsetHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.offsetWidth, container.offsetHeight);
+    }
+  });
+  
+  console.log('3D Earth Globe Loaded - Kerala Marker at 10.850516°N, 76.271080°E');
+}
+
+  // ==========================================
+  // 3D CARD TILT EFFECT
+  // ==========================================
+  const card = document.getElementById('property-card');
+  if (card) {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = (y - centerY) / 15;
+      const rotateY = (centerX - x) / 15;
+      
+      gsap.to(card, {
+        rotateX: rotateX,
+        rotateY: rotateY,
+        duration: 0.5,
+        ease: "power2.out"
+      });
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, {
+        rotateX: 0,
+        rotateY: 0,
+        duration: 0.5,
+        ease: "power2.out"
+      });
+    });
+  }
+  
+  // ==========================================
+  // SMOOTH SCROLL FOR ANCHOR LINKS
+  // ==========================================
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href');
+      if (targetId !== '#' && targetId !== '#contact') {
+        const target = document.querySelector(targetId);
+        if (target) {
+          lenis.scrollTo(target, { offset: -80, duration: 1.5 });
+        }
+      }
+    });
+  });
+  
+  // ==========================================
+  // PARTICLE NETWORK CANVAS
+  // ==========================================
+  const particleCanvas = document.getElementById('particle-network');
+  if (particleCanvas) {
+    const ctx = particleCanvas.getContext('2d');
+    particleCanvas.width = window.innerWidth;
+    particleCanvas.height = window.innerHeight;
+    
+    const particles = [];
+    const particleCount = 80;
+    const connectionDistance = 150;
+    
+    class Particle {
+      constructor() {
+        this.x = Math.random() * particleCanvas.width;
+        this.y = Math.random() * particleCanvas.height;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.radius = Math.random() * 2 + 1;
+      }
+      
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        
+        if (this.x < 0 || this.x > particleCanvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > particleCanvas.height) this.vy *= -1;
+      }
+      
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(49, 130, 206, 0.8)';
+        ctx.fill();
+      }
+    }
+    
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+    
+    function animateParticles() {
+      ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+      
+      particles.forEach((particle, i) => {
+        particle.update();
+        particle.draw();
+        
+        particles.slice(i + 1).forEach(otherParticle => {
+          const dx = particle.x - otherParticle.x;
+          const dy = particle.y - otherParticle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < connectionDistance) {
+            ctx.beginPath();
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(otherParticle.x, otherParticle.y);
+            ctx.strokeStyle = `rgba(49, 130, 206, ${1 - distance / connectionDistance})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        });
+      });
+      
+      requestAnimationFrame(animateParticles);
+    }
+    
+    animateParticles();
+    
+    window.addEventListener('resize', () => {
+      particleCanvas.width = window.innerWidth;
+      particleCanvas.height = window.innerHeight;
+    });
+  }
+  
+  // ==========================================
+  // THREE.JS GRID ANIMATION - BLUE THEME
+  // ==========================================
+  const canvas = document.getElementById('hero-3d-grid');
+  if (canvas && typeof THREE !== 'undefined') {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+    
+    camera.position.set(0, 15, 25);
+    camera.rotation.x = -0.5;
+    
+    const gridSize = 80;
+    const gridDivisions = 40;
+    
+    const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, 0x3182ce, 0x60a5fa);
+    gridHelper.material.transparent = true;
+    gridHelper.material.opacity = 0.4;
+    scene.add(gridHelper);
+    
+    const planeGeometry = new THREE.PlaneGeometry(gridSize, gridSize, gridDivisions, gridDivisions);
+    const planeMaterial = new THREE.MeshBasicMaterial({
+      color: 0x3182ce,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.3
+    });
+    
+    const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
+    planeMesh.rotation.x = -Math.PI / 2;
+    scene.add(planeMesh);
+    
+    const positions = planeGeometry.attributes.position;
+    const originalPositions = [];
+    for (let i = 0; i < positions.count; i++) {
+      originalPositions.push({
+        x: positions.getX(i),
+        y: positions.getY(i),
+        z: positions.getZ(i)
+      });
+    }
+    
+    const particleCount = 200;
+    const particleGeometry = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleColors = new Float32Array(particleCount * 3);
+    
+    for (let i = 0; i < particleCount; i++) {
+      particlePositions[i * 3] = (Math.random() - 0.5) * gridSize;
+      particlePositions[i * 3 + 1] = 0;
+      particlePositions[i * 3 + 2] = (Math.random() - 0.5) * gridSize;
+      
+      particleColors[i * 3] = 0.2 + Math.random() * 0.3;
+      particleColors[i * 3 + 1] = 0.5 + Math.random() * 0.3;
+      particleColors[i * 3 + 2] = 0.8 + Math.random() * 0.2;
+    }
+    
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+    
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 0.15,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.8,
+      blending: THREE.AdditiveBlending
+    });
+    
+    const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particleSystem);
+    
+    const ambientLight = new THREE.AmbientLight(0x3182ce, 0.3);
+    scene.add(ambientLight);
+    
+    const pointLight = new THREE.PointLight(0x60a5fa, 1.5, 100);
+    pointLight.position.set(0, 10, 0);
+    scene.add(pointLight);
+    
+    let mouseX = 0, mouseY = 0;
+    let targetCameraX = 0;
+    
+    document.addEventListener('mousemove', (event) => {
+      mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+      mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+      targetCameraX = mouseX * 5;
+    });
+    
+    let time = 0;
+    const waveSpeed = 0.5;
+    const waveAmplitude = 2;
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      time += 0.01;
+      
+      for (let i = 0; i < positions.count; i++) {
+        const x = originalPositions[i].x;
+        const y = originalPositions[i].y;
+        const distance = Math.sqrt(x * x + y * y);
+        const wave = Math.sin(distance * 0.2 - time * waveSpeed) * waveAmplitude;
+        positions.setZ(i, originalPositions[i].z + wave);
+      }
+      positions.needsUpdate = true;
+      
+      gridHelper.rotation.y += 0.001;
+      planeMesh.rotation.z += 0.001;
+      
+      const particlePos = particleGeometry.attributes.position;
+      for (let i = 0; i < particleCount; i++) {
+        const x = particlePos.getX(i);
+        const z = particlePos.getZ(i);
+        const distance = Math.sqrt(x * x + z * z);
+        const wave = Math.sin(distance * 0.2 - time * waveSpeed) * waveAmplitude;
+        particlePos.setY(i, wave * 0.5);
+      }
+      particlePos.needsUpdate = true;
+      
+      camera.position.x += (targetCameraX - camera.position.x) * 0.05;
+      camera.lookAt(0, 0, 0);
+      
+      pointLight.position.x = Math.sin(time * 0.5) * 20;
+      pointLight.position.z = Math.cos(time * 0.5) * 20;
+      
+      renderer.render(scene, camera);
+    }
+    
+    animate();
+    
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  }
+  
+  // ==========================================
+  // THREE.JS BLOCKCHAIN CUBES - FLOATING BLOCKS
+  // ==========================================
+  const blockchainCanvas = document.getElementById('blockchain-cubes');
+  if (blockchainCanvas && typeof THREE !== 'undefined') {
+    const scene2 = new THREE.Scene();
+    const camera2 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer2 = new THREE.WebGLRenderer({ canvas: blockchainCanvas, alpha: true, antialias: true });
+    
+    renderer2.setSize(window.innerWidth, window.innerHeight);
+    renderer2.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer2.setClearColor(0x000000, 0);
+    
+    camera2.position.z = 30;
+    
+    const cubes = [];
+    const cubeCount = 15;
+    
+    for (let i = 0; i < cubeCount; i++) {
+      const geometry = new THREE.BoxGeometry(2, 2, 2);
+      const edges = new THREE.EdgesGeometry(geometry);
+      const material = new THREE.LineBasicMaterial({ 
+        color: 0x3182ce,
+        transparent: true,
+        opacity: 0.6
+      });
+      const cube = new THREE.LineSegments(edges, material);
+      
+      cube.position.x = (Math.random() - 0.5) * 50;
+      cube.position.y = (Math.random() - 0.5) * 50;
+      cube.position.z = (Math.random() - 0.5) * 30;
+      
+      cube.rotation.x = Math.random() * Math.PI;
+      cube.rotation.y = Math.random() * Math.PI;
+      
+      cube.userData = {
+        velocity: {
+          x: (Math.random() - 0.5) * 0.02,
+          y: (Math.random() - 0.5) * 0.02,
+          rotation: (Math.random() - 0.5) * 0.02
+        }
+      };
+      
+      scene2.add(cube);
+      cubes.push(cube);
+    }
+    
+    const ambientLight2 = new THREE.AmbientLight(0x3182ce, 0.5);
+    scene2.add(ambientLight2);
+    
+    function animateBlockchain() {
+      requestAnimationFrame(animateBlockchain);
+      
+      cubes.forEach(cube => {
+        cube.position.x += cube.userData.velocity.x;
+        cube.position.y += cube.userData.velocity.y;
+        
+        cube.rotation.x += cube.userData.velocity.rotation;
+        cube.rotation.y += cube.userData.velocity.rotation;
+        
+        if (cube.position.x > 25 || cube.position.x < -25) {
+          cube.userData.velocity.x *= -1;
+        }
+        if (cube.position.y > 25 || cube.position.y < -25) {
+          cube.userData.velocity.y *= -1;
+        }
+      });
+      
+      renderer2.render(scene2, camera2);
+    }
+    
+    animateBlockchain();
+    
+    window.addEventListener('resize', () => {
+      camera2.aspect = window.innerWidth / window.innerHeight;
+      camera2.updateProjectionMatrix();
+      renderer2.setSize(window.innerWidth, window.innerHeight);
+    });
+  }
+  
+  // ==========================================
+  // THREE.JS BLOCKCHAIN NETWORK 3D SECTION
+  // ==========================================
+  const networkCanvas = document.getElementById('blockchain-network-3d');
+  if (networkCanvas && typeof THREE !== 'undefined') {
+    const scene3 = new THREE.Scene();
+    const camera3 = new THREE.PerspectiveCamera(75, networkCanvas.offsetWidth / networkCanvas.offsetHeight, 0.1, 1000);
+    const renderer3 = new THREE.WebGLRenderer({ canvas: networkCanvas, alpha: true, antialias: true });
+    
+    renderer3.setSize(networkCanvas.offsetWidth, networkCanvas.offsetHeight);
+    renderer3.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer3.setClearColor(0x000000, 0);
+    
+    camera3.position.z = 50;
+    
+    const nodes = [];
+    const nodeCount = 25;
+    
+    for (let i = 0; i < nodeCount; i++) {
+      const geometry = new THREE.SphereGeometry(0.5, 16, 16);
+      const material = new THREE.MeshBasicMaterial({ 
+        color: 0x3182ce,
+        transparent: true,
+        opacity: 0.8
+      });
+      const node = new THREE.Mesh(geometry, material);
+      
+      const angle = (i / nodeCount) * Math.PI * 2;
+      const radius = 15 + Math.random() * 10;
+      
+      node.position.x = Math.cos(angle) * radius;
+      node.position.y = Math.sin(angle) * radius;
+      node.position.z = (Math.random() - 0.5) * 20;
+      
+      scene3.add(node);
+      nodes.push(node);
+    }
+    
+    const lineMaterial = new THREE.LineBasicMaterial({ 
+      color: 0x60a5fa,
+      transparent: true,
+      opacity: 0.3
+    });
+    
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        if (Math.random() > 0.7) {
+          const points = [];
+          points.push(nodes[i].position);
+          points.push(nodes[j].position);
+          
+          const geometry = new THREE.BufferGeometry().setFromPoints(points);
+          const line = new THREE.Line(geometry, lineMaterial);
+          scene3.add(line);
+        }
+      }
+    }
+    
+    const ambientLight3 = new THREE.AmbientLight(0x3182ce, 0.5);
+    scene3.add(ambientLight3);
+    
+    let networkTime = 0;
+    
+    function animateNetwork3D() {
+      requestAnimationFrame(animateNetwork3D);
+      networkTime += 0.005;
+      
+      scene3.rotation.y = networkTime;
+      scene3.rotation.x = Math.sin(networkTime * 0.5) * 0.2;
+      
+      nodes.forEach((node, i) => {
+        node.position.y += Math.sin(networkTime + i) * 0.02;
+      });
+      
+      renderer3.render(scene3, camera3);
+    }
+    
+    animateNetwork3D();
+  }
+  
+  console.log('Professional Blue Web3 Kerala BLMS with Enhanced 3D Loaded Successfully');
+});
+</script>
+
+{% endblock %}

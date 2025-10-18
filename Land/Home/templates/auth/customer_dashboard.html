@@ -1,0 +1,332 @@
+{% extends "base.html" %}
+
+{% block title %}Customer Dashboard - Kerala BLMS{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-900">
+  <!-- Header Section -->
+  <div class="bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-display font-bold text-white mb-2">
+            Welcome back, {{ customer.user.first_name }}!
+          </h1>
+          <p class="text-slate-400">Kerala Blockchain Land Management System</p>
+        </div>
+        <div class="hidden md:flex items-center space-x-4">
+          <div class="w-12 h-12 bg-accent-400 rounded-lg flex items-center justify-center">
+            <i class="fas fa-user text-white text-lg"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Dashboard Overview Panel -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-semibold text-white mb-6">Dashboard Overview</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center">
+              <i class="fas fa-clock text-yellow-400"></i>
+            </div>
+            <div>
+              <p class="text-sm text-slate-400">Pending</p>
+              <p class="text-2xl font-bold text-yellow-400">3</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
+              <i class="fas fa-search text-blue-400"></i>
+            </div>
+            <div>
+              <p class="text-sm text-slate-400">Under Review</p>
+              <p class="text-2xl font-bold text-blue-400">2</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
+              <i class="fas fa-check-circle text-green-400"></i>
+            </div>
+            <div>
+              <p class="text-sm text-slate-400">Approved</p>
+              <p class="text-2xl font-bold text-green-400">8</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center">
+              <i class="fas fa-bell text-purple-400"></i>
+            </div>
+            <div>
+              <p class="text-sm text-slate-400">Notifications</p>
+              <p class="text-2xl font-bold text-purple-400">5</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Action Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+      
+      <!-- Submit New Transaction -->
+      <a href="{% url "submit_transaction" %}" class="group bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-accent-400 hover:bg-slate-700 transition-all duration-300">
+        <div class="flex flex-col items-center text-center">
+          <div class="w-16 h-16 bg-accent-400/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-accent-400/20 transition-colors">
+            <i class="fas fa-plus-circle text-accent-400 text-2xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-accent-400 transition-colors">
+            Submit New Transaction
+          </h3>
+          <p class="text-slate-400 text-sm mb-4">
+            Start new deed transaction - Sale, Will, Inheritance, Mortgage, Gift, or Power of Attorney
+          </p>
+          <div class="text-xs text-slate-500">
+            Select deed type • Upload documents • Submit for review
+          </div>
+        </div>
+      </a>
+
+      <!-- Transaction Wallet -->
+      <a href="#" class="group bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-purple-400 hover:bg-slate-700 transition-all duration-300">
+        <div class="flex flex-col items-center text-center">
+          <div class="w-16 h-16 bg-purple-400/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-purple-400/20 transition-colors">
+            <i class="fas fa-wallet text-purple-400 text-2xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-purple-400 transition-colors">
+            Transaction Wallet
+          </h3>
+          <p class="text-slate-400 text-sm mb-4">
+            View all transactions, track status, fees, and blockchain confirmations
+          </p>
+          <div class="text-xs text-slate-500">
+            History • Status • Receipts • Hash verification
+          </div>
+        </div>
+      </a>
+
+      <!-- Verify Certificate -->
+      <a href="#" class="group bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-green-400 hover:bg-slate-700 transition-all duration-300">
+        <div class="flex flex-col items-center text-center">
+          <div class="w-16 h-16 bg-green-400/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-green-400/20 transition-colors">
+            <i class="fas fa-shield-alt text-green-400 text-2xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-green-400 transition-colors">
+            Verify Certificate
+          </h3>
+          <p class="text-slate-400 text-sm mb-4">
+            Upload certificate ID to verify authenticity via blockchain
+          </p>
+          <div class="text-xs text-slate-500">
+            Upload • Verify hash • Instant report
+          </div>
+        </div>
+      </a>
+
+      <!-- Property Valuation -->
+      <a href="{% url "property_valuation" %}" class="group bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-amber-400 hover:bg-slate-700 transition-all duration-300">
+        <div class="flex flex-col items-center text-center">
+          <div class="w-16 h-16 bg-amber-400/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-amber-400/20 transition-colors">
+            <i class="fas fa-chart-line text-amber-400 text-2xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-amber-400 transition-colors">
+            Property Valuation
+          </h3>
+          <p class="text-slate-400 text-sm mb-4">
+            Get preliminary valuation with market trends and historical data
+          </p>
+          <div class="text-xs text-slate-500">
+            Submit details • Market value • Trends • Reports
+          </div>
+        </div>
+      </a>
+
+      <!-- Download Approved Records -->
+      <a href="#" class="group bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-cyan-400 hover:bg-slate-700 transition-all duration-300">
+        <div class="flex flex-col items-center text-center">
+          <div class="w-16 h-16 bg-cyan-400/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-cyan-400/20 transition-colors">
+            <i class="fas fa-download text-cyan-400 text-2xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-cyan-400 transition-colors">
+            Download Records
+          </h3>
+          <p class="text-slate-400 text-sm mb-4">
+            Download official approved deeds and certificates with blockchain hash
+          </p>
+          <div class="text-xs text-slate-500">
+            Official documents • Blockchain verified • Certificates
+          </div>
+        </div>
+      </a>
+
+      <!-- User Profile & Settings -->
+      <a href="#" class="group bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-indigo-400 hover:bg-slate-700 transition-all duration-300">
+        <div class="flex flex-col items-center text-center">
+          <div class="w-16 h-16 bg-indigo-400/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-indigo-400/20 transition-colors">
+            <i class="fas fa-user-cog text-indigo-400 text-2xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-indigo-400 transition-colors">
+            Profile & Settings
+          </h3>
+          <p class="text-slate-400 text-sm mb-4">
+            Update contact information, password, and view personal details
+          </p>
+          <div class="text-xs text-slate-500">
+            Contact info • Password • Documents • Settings
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Security & Trust Section -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-semibold text-white mb-6">Security & Trust</h2>
+      <div class="bg-slate-800 rounded-xl p-8 border border-slate-700">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <i class="fas fa-lock text-green-400 text-xl"></i>
+            </div>
+            <h3 class="font-semibold text-white mb-2">Action Logging</h3>
+            <p class="text-sm text-slate-400">All your actions are logged with timestamps for complete audit trail</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <i class="fas fa-cube text-blue-400 text-xl"></i>
+            </div>
+            <h3 class="font-semibold text-white mb-2">Blockchain Anchoring</h3>
+            <p class="text-sm text-slate-400">Approved deeds are anchored on blockchain ensuring tamper-proof records</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <i class="fas fa-shield-alt text-purple-400 text-xl"></i>
+            </div>
+            <h3 class="font-semibold text-white mb-2">Verification Ready</h3>
+            <p class="text-sm text-slate-400">Every approved record includes blockchain hash for instant verification</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="mb-12">
+      <h2 class="text-xl font-semibold text-white mb-6">Recent Activity</h2>
+      <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+        <div class="divide-y divide-slate-700">
+          <div class="p-4 hover:bg-slate-700/50 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-green-500/10 rounded-full flex items-center justify-center">
+                  <i class="fas fa-check text-green-400 text-xs"></i>
+                </div>
+                <div>
+                  <p class="text-white font-medium">Transaction Approved</p>
+                  <p class="text-sm text-slate-400">Sale deed for Property #PR2025001 has been approved</p>
+                </div>
+              </div>
+              <span class="text-xs text-slate-500">2 hours ago</span>
+            </div>
+          </div>
+          
+          <div class="p-4 hover:bg-slate-700/50 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-blue-500/10 rounded-full flex items-center justify-center">
+                  <i class="fas fa-search text-blue-400 text-xs"></i>
+                </div>
+                <div>
+                  <p class="text-white font-medium">Document Under Review</p>
+                  <p class="text-sm text-slate-400">Will deed documents are being reviewed by registrar</p>
+                </div>
+              </div>
+              <span class="text-xs text-slate-500">1 day ago</span>
+            </div>
+          </div>
+          
+          <div class="p-4 hover:bg-slate-700/50 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-yellow-500/10 rounded-full flex items-center justify-center">
+                  <i class="fas fa-upload text-yellow-400 text-xs"></i>
+                </div>
+                <div>
+                  <p class="text-white font-medium">Document Uploaded</p>
+                  <p class="text-sm text-slate-400">Inheritance deed documents uploaded successfully</p>
+                </div>
+              </div>
+              <span class="text-xs text-slate-500">3 days ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout Section -->
+    <div class="flex justify-center">
+      <a href="#" class="inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-200">
+        <i class="fas fa-sign-out-alt mr-2"></i>
+        Logout
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add subtle entrance animations
+    const cards = document.querySelectorAll('.bg-slate-800');
+    if (cards.length) {
+      cards.forEach((card, index) => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+
+          setTimeout(() => {
+              card.style.transition = 'all 0.6s ease';
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+          }, index * 50);
+      });
+    }
+
+    // Stats counter animation
+    const statNumbers = document.querySelectorAll('.text-2xl.font-bold');
+    if (statNumbers.length) {
+      statNumbers.forEach(stat => {
+          const rawText = stat.textContent.trim();
+          const targetValue = parseInt(rawText.replace(/[^\d]/g, '')) || 0;
+          let currentValue = 0;
+          const increment = Math.max(Math.ceil(targetValue / 20), 1);
+
+          const timer = setInterval(() => {
+              currentValue += increment;
+              if (currentValue >= targetValue) {
+                  currentValue = targetValue;
+                  clearInterval(timer);
+              }
+              stat.textContent = currentValue;
+          }, 50);
+      });
+    }
+});
+</script>
+{% endblock %}

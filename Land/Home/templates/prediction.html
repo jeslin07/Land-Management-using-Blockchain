@@ -1,0 +1,369 @@
+{% extends "base.html" %}
+
+{% block title %}Property Valuation - Kerala BLMS{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-900 relative overflow-hidden">
+  <!-- Three.js Canvas Container -->
+  <canvas id="three-canvas" class="fixed top-0 left-0 w-full h-full z-0"></canvas>
+  
+  <!-- Content Overlay -->
+  <div class="relative z-10">
+    <div class="bg-gradient-to-r from-slate-800/80 to-slate-900/80 backdrop-blur-sm border-b border-amber-500/30 px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto flex justify-between items-center">
+      <h1 class="text-3xl font-display font-bold text-white drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">
+        Property Valuation
+      </h1>
+      <a href="{% url 'customer_dashboard' %}" 
+         class="text-amber-400 hover:text-amber-300 transition-all duration-300 hover:drop-shadow-[0_0_10px_rgba(251,191,36,0.8)] underline">
+        Back to Dashboard
+      </a>
+    </div>
+
+    <main class="max-w-4xl mx-auto p-8">
+      <!-- Valuation Form Card with Glass Effect -->
+      <form method="POST" 
+            class="bg-slate-800/60 backdrop-blur-xl rounded-2xl p-8 border border-amber-500/30 shadow-[0_0_50px_rgba(251,191,36,0.15)] hover:shadow-[0_0_80px_rgba(251,191,36,0.25)] transition-all duration-500 space-y-6 relative overflow-hidden">
+        
+        <!-- Animated Corner Accents -->
+        <div class="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-amber-400/50 rounded-tl-2xl"></div>
+        <div class="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-amber-400/50 rounded-br-2xl"></div>
+        
+        {% csrf_token %}
+        {% if error %}
+        <p class="text-red-400 bg-red-900/50 backdrop-blur-sm text-center p-3 rounded-lg border border-red-500/30 animate-pulse">
+          {{ error }}
+        </p>
+        {% endif %}
+
+        <div class="form-group relative">
+          <label for="district" class="block text-amber-300 font-semibold mb-2 text-sm uppercase tracking-wider">
+            Select District *
+          </label>
+          <select id="district" name="district" required
+                  class="w-full rounded-lg bg-slate-700/80 backdrop-blur-sm text-white px-4 py-3 border border-amber-500/30 focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all duration-300 hover:border-amber-400/50 cursor-pointer">
+            <option value="">Choose Your District</option>
+            {% for d in districts %}
+            <option value="{{ d }}">{{ d|title }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group relative">
+          <label for="locality" class="block text-amber-300 font-semibold mb-2 text-sm uppercase tracking-wider">
+            Select Locality *
+          </label>
+          <select id="locality" name="locality" required
+                  class="w-full rounded-lg bg-slate-700/80 backdrop-blur-sm text-white px-4 py-3 border border-amber-500/30 focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all duration-300 hover:border-amber-400/50 cursor-pointer">
+            <option value="">Select District First</option>
+          </select>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(251,191,36,0.6)] active:scale-[0.98] uppercase tracking-wider">
+          <span class="flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            Calculate Valuation
+          </span>
+        </button>
+      </form>
+
+      {% if result %}
+      <!-- Result Card with Animated Glow -->
+      <section class="mt-12 bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-xl rounded-2xl p-8 border border-amber-500/50 shadow-[0_0_80px_rgba(251,191,36,0.3)] relative overflow-hidden animate-fadeIn">
+        
+        <!-- Glowing Orb Background -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="relative z-10">
+  <h2 class="text-lg font-semibold mb-3 text-amber-300 uppercase tracking-wide drop-shadow-[0_0_6px_rgba(251,191,36,0.5)]">
+    Predicted Valuation
+  </h2>
+
+  <!-- Location Box -->
+  <div class="bg-slate-700/40 rounded-lg p-4 mb-3 border border-amber-500/20">
+    <p class="text-slate-300 text-xs uppercase tracking-wider mb-1">Location</p>
+    <p class="text-white text-base font-semibold leading-tight">
+      {{ result.locality|title }}, {{ result.district|title }}
+    </p>
+  </div>
+
+  <!-- Price Box -->
+  <div class="bg-gradient-to-r from-amber-500/10 to-amber-600/10 rounded-lg p-5 border border-amber-400/30 backdrop-blur-sm">
+    <p class="text-amber-300 text-xs uppercase tracking-wider mb-2">Price Per Cent</p>
+    <div class="flex items-baseline gap-1">
+      <span class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 drop-shadow-[0_0_12px_rgba(251,191,36,0.8)] animate-glow">
+        ₹{{ result.price_per_cent|floatformat:2 }}
+      </span>
+    </div>
+  </div>
+</div>
+
+
+          <!-- Additional Info -->
+          <div class="mt-6 p-4 bg-slate-700/30 rounded-lg border border-amber-500/20">
+            <p class="text-slate-400 text-sm flex items-center gap-2">
+              <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Valuation based on AI-powered blockchain land registry data
+            </p>
+          </div>
+        </div>
+      </section>
+      {% endif %}
+
+    </main>
+  </div>
+</div>
+
+<style>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.8));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px rgba(251, 191, 36, 1));
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// Three.js Animated Background
+let scene, camera, renderer, particles, particleSystem;
+let mouseX = 0, mouseY = 0;
+let windowHalfX = window.innerWidth / 2;
+let windowHalfY = window.innerHeight / 2;
+
+function initThreeJS() {
+  const canvas = document.getElementById('three-canvas');
+  
+  // Scene setup
+  scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x0f172a, 0.0008);
+  
+  // Camera setup
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+  camera.position.z = 1000;
+  
+  // Renderer setup
+  renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  
+  // Create particles
+  const geometry = new THREE.BufferGeometry();
+  const vertices = [];
+  const colors = [];
+  
+  // Amber/Gold color palette for Web3 feel
+  const color1 = new THREE.Color(0xfbbf24); // Amber-400
+  const color2 = new THREE.Color(0xf59e0b); // Amber-500
+  const color3 = new THREE.Color(0xd97706); // Amber-600
+  
+  for (let i = 0; i < 15000; i++) {
+    const x = Math.random() * 4000 - 2000;
+    const y = Math.random() * 4000 - 2000;
+    const z = Math.random() * 4000 - 2000;
+    
+    vertices.push(x, y, z);
+    
+    // Random color from palette
+    const colorChoice = Math.random();
+    let color;
+    if (colorChoice < 0.33) color = color1;
+    else if (colorChoice < 0.66) color = color2;
+    else color = color3;
+    
+    colors.push(color.r, color.g, color.b);
+  }
+  
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+  
+  // Particle material
+  const material = new THREE.PointsMaterial({
+    size: 3,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.8,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  
+  particleSystem = new THREE.Points(geometry, material);
+  scene.add(particleSystem);
+  
+  // Add floating geometric shapes
+  addFloatingShapes();
+  
+  // Mouse move event
+  document.addEventListener('mousemove', onDocumentMouseMove, false);
+  document.addEventListener('touchmove', onDocumentTouchMove, false);
+  
+  // Window resize
+  window.addEventListener('resize', onWindowResize, false);
+  
+  animate();
+}
+
+function addFloatingShapes() {
+  // Add some glowing cubes and spheres
+  const cubeGeometry = new THREE.BoxGeometry(50, 50, 50);
+  const sphereGeometry = new THREE.SphereGeometry(30, 32, 32);
+  
+  const material = new THREE.MeshBasicMaterial({
+    color: 0xfbbf24,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.3
+  });
+  
+  for (let i = 0; i < 5; i++) {
+    const mesh = new THREE.Mesh(
+      Math.random() > 0.5 ? cubeGeometry : sphereGeometry,
+      material.clone()
+    );
+    
+    mesh.position.x = Math.random() * 2000 - 1000;
+    mesh.position.y = Math.random() * 2000 - 1000;
+    mesh.position.z = Math.random() * 1000 - 500;
+    
+    mesh.rotation.x = Math.random() * 2 * Math.PI;
+    mesh.rotation.y = Math.random() * 2 * Math.PI;
+    
+    scene.add(mesh);
+  }
+}
+
+function onDocumentMouseMove(event) {
+  mouseX = (event.clientX - windowHalfX) * 0.5;
+  mouseY = (event.clientY - windowHalfY) * 0.5;
+}
+
+function onDocumentTouchMove(event) {
+  if (event.touches.length === 1) {
+    event.preventDefault();
+    mouseX = (event.touches[0].pageX - windowHalfX) * 0.5;
+    mouseY = (event.touches[0].pageY - windowHalfY) * 0.5;
+  }
+}
+
+function onWindowResize() {
+  windowHalfX = window.innerWidth / 2;
+  windowHalfY = window.innerHeight / 2;
+  
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  render();
+}
+
+function render() {
+  const time = Date.now() * 0.00005;
+  
+  // Rotate particle system
+  particleSystem.rotation.x = time * 0.5;
+  particleSystem.rotation.y = time * 0.3;
+  
+  // Rotate geometric shapes
+  scene.children.forEach((child) => {
+    if (child instanceof THREE.Mesh) {
+      child.rotation.x += 0.005;
+      child.rotation.y += 0.005;
+    }
+  });
+  
+  // Camera movement based on mouse
+  camera.position.x += (mouseX - camera.position.x) * 0.05;
+  camera.position.y += (-mouseY - camera.position.y) * 0.05;
+  camera.lookAt(scene.position);
+  
+  renderer.render(scene, camera);
+}
+
+// Initialize Three.js when page loads
+window.addEventListener('load', initThreeJS);
+
+// District/Locality Dynamic Loading
+document.addEventListener('DOMContentLoaded', () => {
+  const districtSelect = document.getElementById('district');
+  const localitySelect = document.getElementById('locality');
+
+  districtSelect.addEventListener('change', () => {
+    const district = districtSelect.value;
+    localitySelect.innerHTML = '<option>Loading...</option>';
+    localitySelect.disabled = true;
+
+    if (!district) {
+      localitySelect.innerHTML = '<option>Select District First</option>';
+      localitySelect.disabled = false;
+      return;
+    }
+
+    fetch(`{% url 'get_localities' %}?district=${encodeURIComponent(district)}`)
+      .then(res => res.json())
+      .then(data => {
+        localitySelect.innerHTML = '';
+        if (data.localities.length === 0) {
+          localitySelect.innerHTML = '<option>No localities found</option>';
+        } else {
+          localitySelect.innerHTML = '<option value="">Select Locality</option>';
+          data.localities.forEach(loc => {
+            const option = document.createElement('option');
+            option.value = loc;
+            option.textContent = loc.charAt(0).toUpperCase() + loc.slice(1);
+            localitySelect.appendChild(option);
+          });
+        }
+        localitySelect.disabled = false;
+      }).catch(() => {
+        localitySelect.innerHTML = '<option>Error loading localities</option>';
+        localitySelect.disabled = true;
+      });
+  });
+});
+</script>
+{% endblock %}

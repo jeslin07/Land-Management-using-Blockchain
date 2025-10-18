@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="bg-slate-800 p-6 rounded-xl border border-slate-700 max-w-md mx-auto mt-10 text-center">
+  <h2 class="text-xl font-semibold text-red-400 mb-4">Confirm Delete</h2>
+  
+  <p class="text-slate-300 mb-6">
+    Are you sure you want to delete 
+    <strong>{{ sub.user.username }}</strong>?
+  </p>
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="flex justify-center gap-3">
+      <button type="submit"
+        class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg transition">
+        Delete
+      </button>
+      <a href="{% url 'admin_dashboard' %}"
+        class="bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-lg transition">
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
