@@ -1,5 +1,5 @@
 from decimal import Decimal, InvalidOperation
-
+from .services.fill_certificate import generate_certificate
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout as auth_logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -8,10 +8,12 @@ from django.core.files.storage import default_storage
 from django.db import transaction as db_transaction
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.http import HttpResponse
 
 from .models import Customer, SubRegistrar, SubRegistrarOffice, Transaction, assign_group
 from .utils import predictor  # assuming existing module
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 
 def index(request):
@@ -31,6 +33,8 @@ def customer_register(request):
         city = request.POST.get('city', '').strip()
         state = request.POST.get('state', '').strip()
         pincode = request.POST.get('pincode', '').strip()
+        eth_address = request.POST.get('eth_address', '').strip()
+
 
         # validations
         if not all([full_name, email, password, confirm_password, adhar_no, phone_no, date_of_birth, pan_number, address, city, state, pincode]):
@@ -44,6 +48,12 @@ def customer_register(request):
         if password != confirm_password:
             messages.error(request, "Passwords do not match.")
             return render(request, 'auth/register.html')
+        
+        if eth_address:
+            if not (eth_address.startswith("0x") and len(eth_address) == 42):
+                messages.error(request, "Please enter a valid Ethereum wallet address.")
+                return render(request, 'auth/register.html')
+
 
         if not (len(adhar_no) == 12 and adhar_no.isdigit()):
             messages.error(request, "Aadhaar number must be exactly 12 digits.")
@@ -94,7 +104,8 @@ def customer_register(request):
                 city=city,
                 state=state,
                 pincode=pincode,
-                email=email
+                email=email,
+                eth_address=eth_address
             )
             messages.success(request, f"Welcome {full_name}! Account created successfully.")
             return redirect('customer_login')
@@ -306,7 +317,6 @@ from django.db import transaction as db_transaction
 from django.contrib.auth.models import User
 
 @login_required
-@user_passes_test(lambda u: u.is_superuser, login_url='/')
 def create_subregistrar(request):
     """
     Create a Sub-Registrar with full details: username, password, office, contact, email, status.
@@ -607,3 +617,71 @@ def application_detail(request, pk):
         "documents": application.documents,
     }
     return render(request, "customer/detail.html", context)
+
+
+@require_POST
+def application_reject(request, pk):
+    tx = get_object_or_404(Transaction, pk=pk)
+
+    tx.status = "rejected"
+    tx.rejection_reason = "Rejected by registrar"   # (later: add form)
+    tx.verified_by = request.user.subregistrar_profile
+    tx.verified_at = timezone.now()
+    tx.save()
+
+    return redirect("registrar_dashboard")
+
+
+@require_POST
+def application_approve(request, pk):
+    tx = get_object_or_404(Transaction, pk=pk)
+
+    data = json.loads(request.body or "{}")
+    tx_hash = data.get("tx_hash")
+
+    if not tx_hash:
+        return JsonResponse({"error": "Missing tx hash"}, status=400)
+
+    tx.blockchain_hash = tx_hash
+    tx.blockchain_anchored_at = timezone.now()
+    tx.status = "approved"
+    tx.verified_by = request.user.subregistrar_profile
+    tx.verified_at = timezone.now()
+    tx.save()
+
+    return JsonResponse({"ok": True})
+
+@require_POST
+def application_approve(request, pk):
+    tx = get_object_or_404(Transaction, pk=pk)
+
+    data = json.loads(request.body or "{}")
+    tx_hash = data.get("tx_hash")
+
+    tx.blockchain_hash = tx_hash
+    tx.status = "approved"
+    tx.blockchain_anchored_at = timezone.now()
+    tx.verified_by = request.user.subregistrar_profile
+    tx.verified_at = timezone.now()
+    tx.save()
+
+    generate_certificate(tx)
+
+    return JsonResponse({"ok": True})
+
+
+@login_required
+def my_certificates(request):
+    customer = get_object_or_404(Customer, user=request.user)
+
+    certificates = (
+        customer.transactions
+        .filter(status="approved")
+        .exclude(certificate_file__isnull=True)
+        .exclude(certificate_file__exact="")
+        .order_by("-submission_date")
+    )
+
+    return render(request, "customer/my_certificates.html", {
+        "certificates": certificates
+    })

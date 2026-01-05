@@ -188,10 +188,11 @@
                     <span class="text-slate-200">{{ application.customer.user.get_full_name }}</span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-accent-400/20 text-accent-300 border border-accent-400/30">
-                      {{ application.get_deed_type_display }}
+                   <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white text-black border border-gray-300">
+                          {{ application.get_deed_type_display }}
                     </span>
-                  </td>
+                    </td>
+
                   <td class="px-6 py-4 whitespace-nowrap">
                     <span class="text-slate-300">{{ application.submission_date|date:"M d, Y" }}</span>
                   </td>
@@ -217,11 +218,12 @@
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-center">
                     <a href="{% url 'application_detail' application.id %}"
-                      class="inline-flex items-center gap-2 px-4 py-2 bg-accent-400 hover:bg-accent-500 text-slate-900 text-sm font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
-                      <i class="fas fa-eye text-xs"></i>
-                      Review
-                    </a>
-                  </td>
+                     class="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-100 text-black text-sm font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
+                    <i class="fas fa-eye text-xs"></i>
+                    Review
+                </a>
+                </td>
+
                 </tr>
                 {% empty %}
                 <tr>
