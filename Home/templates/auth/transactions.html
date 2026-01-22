@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* New Base Color Scheme */
+    .bg-main {
+        background-color: #1a202c;
+    }
+    
+    /* Updated Glass/Card Styles to match #1a202c */
+    .glass-panel {
+        background: rgba(45, 55, 72, 0.4); /* Slightly lighter than bg */
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .verified-badge {
+        background: rgba(56, 178, 172, 0.15); /* Teal tint looks better on blue-gray */
+        color: #81e6d9;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.4s ease-out forwards;
+    }
+    
+    /* Custom Scrollbar for the table */
+    .custom-scroll::-webkit-scrollbar {
+        height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+        background: #1a202c;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+        background: #4a5568;
+        border-radius: 3px;
+    }
+</style>
+
+<div class="min-h-screen bg-[#1a202c] text-slate-200 font-sans selection:bg-indigo-500 selection:text-white">
+
+    <div class="max-w-[1400px] mx-auto animate-fade-in p-6 md:p-12">
+
+        <header class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight text-white mb-2">Land Registry & Transactions</h1>
+                <p class="text-slate-400 text-sm">Manage and track land deeds, titles, and ownership transfers securely.</p>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2d3748] hover:bg-[#4a5568] border border-slate-700 text-sm font-medium transition-colors text-slate-300 shadow-lg shadow-black/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" /><path d="M3 5v14a2 2 0 0 0 2 2h16v-5" /><path d="M18 12a2 2 0 0 0 0 4h4v-4Z" /></svg>
+                    <span class="text-emerald-400">Wallet Connected</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="w-full">
+            <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 mb-8 px-1">
+                <div class="flex items-center gap-1 bg-[#2d3748] p-1 rounded-xl border border-slate-700 shadow-md">
+                    <button class="px-6 py-2.5 rounded-lg bg-white text-[#1a202c] font-bold text-sm shadow-sm transition-all">All Deeds</button>
+                    <button class="px-6 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#4a5568] font-medium text-sm transition-all">Sale</button>
+                    <button class="px-6 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#4a5568] font-medium text-sm transition-all">Inheritance</button>
+                    <button class="px-6 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#4a5568] font-medium text-sm transition-all">Mortgage</button>
+                </div>
+
+                <div class="flex items-center gap-4 flex-wrap">
+                    <div class="flex items-center gap-2 text-sm text-slate-400 cursor-pointer hover:text-white transition-colors">
+                        <span>Region:</span>
+                        <span class="text-white font-medium flex items-center gap-1">North America <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                    </div>
+                    <div class="h-4 w-[1px] bg-slate-700"></div>
+                    <button class="p-2.5 rounded-lg border border-slate-700 text-slate-400 hover:text-white hover:bg-[#2d3748] transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="w-full overflow-x-auto custom-scroll pb-4">
+                <div class="min-w-[900px]">
+                    
+                    <div class="grid grid-cols-12 gap-4 px-6 py-4 text-xs font-semibold text-slate-500 tracking-wider uppercase border-b border-slate-700/50">
+                        <div class="col-span-3">Owner / Entity</div>
+                        <div class="col-span-2">Price / Valuation</div>
+                        <div class="col-span-3">Land Limit / Area</div>
+                        <div class="col-span-2">Registry & Rating</div>
+                        <div class="col-span-2 text-right">Action</div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        {% for tx in transactions %}
+                        <div class="group grid grid-cols-12 gap-4 px-6 py-5 border-b border-slate-700/50 hover:bg-[#2d3748]/50 transition-all items-center rounded-lg hover:shadow-lg hover:shadow-black/10 my-1">
+                            
+                            <div class="col-span-3 flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 shadow-inner flex items-center justify-center text-white font-bold text-sm border border-white/10">
+                                    {{ tx.customer.user.first_name|slice:":1" }}{{ tx.customer.user.last_name|slice:":1" }}
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-white font-medium text-sm">{{ tx.customer.user.get_full_name }}</span>
+                                        {% if tx.status == "approved" %}
+                                        <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-xs text-slate-500 mt-0.5 font-mono">Ref: {{ tx.reference_no }}</div>
+                                </div>
+                            </div>
+
+                            <div class="col-span-2">
+                                <div class="text-lg font-medium text-emerald-400 tracking-tight">₹ {{ tx.valuation }}</div>
+                                <div class="text-xs text-slate-500 mt-0.5">{{ tx.get_deed_type_display }}</div>
+                            </div>
+
+                            <div class="col-span-3">
+                                <div class="text-sm text-slate-200 font-medium">{{ tx.land_area }} Acres</div>
+                                <div class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+                                    Zoning: {{ tx.land_type }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-2">
+                                <div class="flex flex-col gap-1.5">
+                                    <div class="flex items-center gap-2 text-xs text-slate-200 font-medium">
+                                        <span class="relative flex h-2 w-2">
+                                          {% if tx.status == 'approved' %}
+                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                          {% elif tx.status == 'pending' %}
+                                            <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                                          {% else %}
+                                            <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                                          {% endif %}
+                                        </span>
+                                        {{ tx.status|title }}
+                                    </div>
+                                    <div class="text-xs text-slate-500">{{ tx.submission_date|date:"M d, Y" }}</div>
+                                </div>
+                            </div>
+
+                            <div class="col-span-2 flex justify-end">
+                                <a href="{% url 'transaction_detail' tx.id %}" class="bg-white hover:bg-slate-100 text-[#1a202c] px-5 py-2 rounded-lg font-bold text-xs uppercase tracking-wide transition-all shadow hover:shadow-lg transform hover:-translate-y-0.5">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-20 text-slate-500 bg-[#2d3748]/30 rounded-xl border border-dashed border-slate-700 mt-4">
+                            <p>No transactions found in the registry.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mt-8 text-sm text-slate-500 px-1 border-t border-slate-800 pt-6">
+                <div>Showing {{ transactions.count }} deeds</div>
+                <div class="flex gap-2">
+                    <button class="px-4 py-1.5 rounded-md hover:bg-[#2d3748] transition-colors text-slate-400 hover:text-white">Previous</button>
+                    <button class="px-4 py-1.5 rounded-md bg-[#2d3748] text-white border border-slate-600 shadow-sm">1</button>
+                    <button class="px-4 py-1.5 rounded-md hover:bg-[#2d3748] transition-colors text-slate-400 hover:text-white">Next</button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

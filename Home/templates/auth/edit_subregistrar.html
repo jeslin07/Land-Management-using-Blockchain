@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-900 flex items-center justify-center px-6 py-12">
+  <div class="max-w-2xl w-full">
+    
+    <!-- Header Section with Gradient -->
+    <div class="bg-gradient-to-r from-accent-400 to-purple-500 rounded-t-2xl p-8 shadow-2xl">
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+          <i class="fas fa-user-edit text-white text-3xl"></i>
+        </div>
+        <div>
+          <h2 class="text-3xl font-bold text-white">Edit Sub Registrar</h2>
+          <p class="text-white/80 text-sm mt-1">Update registrar information and settings</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="bg-slate-800 rounded-b-2xl p-8 border-x border-b border-slate-700 shadow-2xl">
+      <form method="POST" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Name (read-only) -->
+        <div class="group">
+          <label class="block text-slate-300 text-sm font-semibold mb-3 flex items-center gap-2">
+            <i class="fas fa-user text-accent-400 text-sm"></i>
+            Full Name
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i class="fas fa-id-badge text-slate-500"></i>
+            </div>
+            <input type="text" 
+              value="{{ sub.user.get_full_name|default:sub.user.username }}" 
+              readonly
+              class="w-full bg-slate-700/50 border border-slate-600 rounded-xl pl-12 pr-4 py-3.5 text-slate-300 cursor-not-allowed focus:outline-none">
+          </div>
+          <p class="text-xs text-slate-500 mt-2 ml-1">
+            <i class="fas fa-lock text-xs mr-1"></i>
+            This field cannot be modified
+          </p>
+        </div>
+
+        <!-- Office Selection -->
+<div class="group mb-4">
+  <label class="block text-slate-300 text-sm font-semibold mb-3 flex items-center gap-2">
+    <i class="fas fa-building text-accent-400 text-sm"></i>
+    Assigned Office
+  </label>
+
+  <div class="relative">
+    <!-- Left icon -->
+    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+      <i class="fas fa-map-marker-alt text-slate-400"></i>
+    </div>
+
+    <!-- Select dropdown -->
+    <select name="office"
+      class="w-full bg-slate-700 border border-slate-600 rounded-xl pl-10 pr-10 py-3.5 text-slate-200 appearance-none focus:outline-none focus:ring-2 focus:ring-accent-400 focus:border-transparent transition-all duration-200 hover:border-slate-500 cursor-pointer">
+      {% for office in offices %}
+        <option value="{{ office.id }}" {% if sub.office.id == office.id %}selected{% endif %}>
+          {{ office.district }}, {{ office.locality }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <!-- Right dropdown icon -->
+    <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+      <i class="fas fa-chevron-down text-slate-400 text-sm"></i>
+    </div>
+  </div>
+</div>
+
+
+        <!-- Contact Number -->
+        <div class="group">
+          <label class="block text-slate-300 text-sm font-semibold mb-3 flex items-center gap-2">
+            <i class="fas fa-phone text-accent-400 text-sm"></i>
+            Contact Number
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i class="fas fa-mobile-alt text-slate-400"></i>
+            </div>
+            <input type="text" 
+              name="contact_number" 
+              value="{{ sub.contact_number|default:'' }}"
+              placeholder="Enter contact number"
+              class="w-full bg-slate-700 border border-slate-600 rounded-xl pl-12 pr-4 py-3.5 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:border-transparent transition-all duration-200 hover:border-slate-500">
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="group">
+          <label class="block text-slate-300 text-sm font-semibold mb-3 flex items-center gap-2">
+            <i class="fas fa-envelope text-accent-400 text-sm"></i>
+            Email Address
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i class="fas fa-at text-slate-400"></i>
+            </div>
+            <input type="email" 
+              name="email" 
+              value="{{ sub.email|default:'' }}"
+              placeholder="registrar@example.com"
+              class="w-full bg-slate-700 border border-slate-600 rounded-xl pl-12 pr-4 py-3.5 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:border-transparent transition-all duration-200 hover:border-slate-500">
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="group">
+          <label class="block text-slate-300 text-sm font-semibold mb-3 flex items-center gap-2">
+            <i class="fas fa-toggle-on text-accent-400 text-sm"></i>
+            Account Status
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i class="fas fa-circle text-slate-400 text-xs"></i>
+            </div>
+            <select name="status" 
+              class="w-full bg-slate-700 border border-slate-600 rounded-xl pl-12 pr-10 py-3.5 text-slate-200 appearance-none focus:outline-none focus:ring-2 focus:ring-accent-400 focus:border-transparent transition-all duration-200 hover:border-slate-500 cursor-pointer">
+              <option value="active" {% if sub.status == 'active' %}selected{% endif %}>
+                ✓ Active - Full Access
+              </option>
+              <option value="inactive" {% if sub.status == 'inactive' %}selected{% endif %}>
+                ⊘ Inactive - Limited Access
+              </option>
+              <option value="suspended" {% if sub.status == 'suspended' %}selected{% endif %}>
+                ⚠ Suspended - No Access
+              </option>
+            </select>
+            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+              <i class="fas fa-chevron-down text-slate-400 text-sm"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="pt-6 border-t border-slate-700 flex flex-col sm:flex-row gap-4">
+          <button type="submit"
+            class="flex-1 bg-gradient-to-r from-accent-400 to-accent-500 hover:from-accent-500 hover:to-accent-600 text-slate-900 font-bold px-6 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-3 group">
+            <i class="fas fa-save text-lg group-hover:scale-110 transition-transform"></i>
+            <span>Save Changes</span>
+          </button>
+          
+          <a href="{% url 'admin_dashboard' %}"
+            class="flex-1 sm:flex-initial bg-slate-700 hover:bg-slate-600 text-white font-semibold px-6 py-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-3">
+            <i class="fas fa-times"></i>
+            <span>Cancel</span>
+          </a>
+        </div>
+
+        <!-- Info Box -->
+        <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 flex items-start gap-3">
+          <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+            <i class="fas fa-info-circle text-blue-400 text-lg"></i>
+          </div>
+          <div>
+            <p class="text-blue-300 text-sm font-medium mb-1">Important Information</p>
+            <p class="text-blue-300/80 text-xs leading-relaxed">
+              Changes to the registrar's office assignment will take effect immediately. 
+              Ensure all pending applications are reviewed before making status changes.
+            </p>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

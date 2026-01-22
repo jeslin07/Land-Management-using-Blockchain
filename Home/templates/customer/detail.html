@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-950 text-slate-200 p-6 md:p-10 relative overflow-hidden flex items-center justify-center">
+    
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+    
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+
+    <div class="max-w-4xl w-full mx-auto relative z-10">
+
+        <div class="mb-8 text-center md:text-left">
+            <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 tracking-tight">
+                Edit Profile
+            </h1>
+            <p class="text-slate-500 mt-2 text-sm">Update your decentralized identity and personal details.</p>
+        </div>
+
+        <form method="post" class="bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] space-y-8 relative overflow-hidden">
+            
+            <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+
+            {% csrf_token %}
+
+            <div class="space-y-4">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="h-px flex-1 bg-gradient-to-r from-slate-700 to-transparent"></div>
+                    <h2 class="text-xs uppercase tracking-[0.2em] text-cyan-400 font-semibold">Personal Information</h2>
+                    <div class="h-px flex-1 bg-gradient-to-l from-slate-700 to-transparent"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="group">
+                        <label class="block text-xs text-slate-400 mb-1 ml-1">First Name</label>
+                        <input name="first_name" value="{{ user_obj.first_name }}" placeholder="First Name" 
+                            class="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-slate-600" />
+                    </div>
+                    <div class="group">
+                        <label class="block text-xs text-slate-400 mb-1 ml-1">Last Name</label>
+                        <input name="last_name" value="{{ user_obj.last_name }}" placeholder="Last Name" 
+                            class="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-slate-600" />
+                    </div>
+                    <div class="group">
+                        <label class="block text-xs text-slate-400 mb-1 ml-1">Email Address</label>
+                        <input name="email" value="{{ user_obj.email }}" placeholder="Email" 
+                            class="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-slate-600" />
+                    </div>
+                    <div class="group">
+                        <label class="block text-xs text-slate-400 mb-1 ml-1">Phone Number</label>
+                        <input name="phone_no" value="{{ customer.phone_no }}" placeholder="Phone Number" 
+                            class="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-slate-600" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="h-px flex-1 bg-gradient-to-r from-slate-700 to-transparent"></div>
+                    <h2 class="text-xs uppercase tracking-[0.2em] text-cyan-400 font-semibold">Identity Details</h2>
+                    <div class="h-px flex-1 bg-gradient-to-l from-slate-700 to-transparent"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="group">
+                        <label class="block text-xs text-slate-400 mb-1 ml-1">Aadhaar Number</label>
+                        <input name="adhar_no" value="{{ customer.adhar_no }}" placeholder="XXXX XXXX XXXX" 
+                            class="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-slate-600" />
+                    </div>
+                    <div class="group">
+                        <label class="block text-xs text-slate-400 mb-1 ml-1">PAN Number</label>
+                        <input name="pan_number" value="{{ customer.pan_number }}" placeholder="ABCDE1234F" 
+                            class="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-slate-600" />
+                    </div>
+                    <div class="md:col-span-2 group">
+                        <label class="block text-xs text-slate-400 mb-1 ml-1">Date of Birth</label>
+                        <input type="date" name="date_of_birth" value="{{ customer.date_of_birth }}" 
+                            class="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-slate-600 [color-scheme:dark]" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="h-px flex-1 bg-gradient-to-r from-slate-700 to-transparent"></div>
+                    <h2 class="text-xs uppercase tracking-[0.2em] text-cyan-400 font-semibold">Address</h2>
+                    <div class="h-px flex-1 bg-gradient-to-l from-slate-700 to-transparent"></div>
+                </div>
+
+                <div class="group">
+                     <label class="block text-xs text-slate-400 mb-1 ml-1">Full Address</label>
+                    <textarea name="address" rows="3" class="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-slate-600 resize-none">{{ customer.address }}</textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div class="group">
+                        <label class="block text-xs text-slate-400 mb-1 ml-1">City</label>
+                        <input name="city" value="{{ customer.city }}" placeholder="City" class="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-slate-600" />
+                    </div>
+                    <div class="group">
+                         <label class="block text-xs text-slate-400 mb-1 ml-1">State</label>
+                        <input name="state" value="{{ customer.state }}" placeholder="State" class="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-slate-600" />
+                    </div>
+                    <div class="group">
+                         <label class="block text-xs text-slate-400 mb-1 ml-1">Pincode</label>
+                        <input name="pincode" value="{{ customer.pincode }}" placeholder="Pincode" class="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-slate-600" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-gradient-to-b from-indigo-900/20 to-purple-900/20 border border-indigo-500/20">
+                <div class="flex items-center gap-3 mb-4">
+                     <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <h2 class="text-sm uppercase tracking-wider text-indigo-300 font-bold">
+                        Ethereum Wallet
+                    </h2>
+                </div>
+
+                <div class="relative group">
+                    <input name="eth_address" value="{{ customer.eth_address }}" placeholder="0x..." 
+                        class="w-full bg-slate-950 border border-indigo-500/30 rounded-xl pl-4 pr-4 py-4 text-sm font-mono text-indigo-100 placeholder-indigo-700/50 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-300 shadow-inner" />
+                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] px-2 py-1 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                        ERC-20
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-6 border-t border-white/5">
+                <button class="relative px-8 py-3 bg-white text-black font-bold rounded-xl overflow-hidden group hover:scale-[1.02] transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]">
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 via-lime-400 to-yellow-400 opacity-100 group-hover:opacity-90 transition-opacity"></div>
+                    <span class="relative z-10 flex items-center gap-2">
+                        <span>Save Changes</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </span>
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

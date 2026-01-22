@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* --- Theming & Fundamentals --- */
+    .bg-custom-dark {
+        background-color: #0f172a; /* Slightly deeper Slate for better contrast */
+    }
+
+    /* Premium Glass Effect */
+    .glass-panel {
+        background: rgba(30, 41, 59, 0.4);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Input Styling */
+    .input-dark {
+        background-color: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(71, 85, 105, 0.3);
+        transition: all 0.2s ease;
+    }
+    .input-dark:hover {
+        border-color: rgba(99, 102, 241, 0.3); /* Indigo hint on hover */
+    }
+    .input-dark:focus-within {
+        border-color: rgba(132, 204, 22, 0.5); /* Lime focus */
+        background-color: rgba(15, 23, 42, 0.8);
+        box-shadow: 0 0 0 1px rgba(132, 204, 22, 0.2);
+    }
+
+    /* Animations & Glows */
+    .monitor-glow {
+        box-shadow: 0 0 50px -15px rgba(132, 204, 22, 0.05);
+    }
+    
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-down {
+        animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+</style>
+
+<div class="min-h-screen bg-custom-dark text-slate-300 p-4 md:p-8 lg:p-12 font-sans selection:bg-lime-500/30 selection:text-lime-200">
+    
+    <div class="w-full max-w-7xl mx-auto">
+        
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 px-1 animate-fade-in-down gap-4">
+            <div class="flex items-center gap-4">
+                <div class="relative flex h-3 w-3 mt-1">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-lime-500"></span>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-white leading-none">Deed Transaction</h1>
+                    <p class="text-xs text-slate-500 font-mono mt-1.5">REF: #LAND-{{ tx.id }}</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3 bg-slate-800/50 p-1 pl-3 rounded-full border border-slate-700/50 backdrop-blur-sm">
+                <span class="text-xs text-slate-400 font-medium">Network</span>
+                <span class="text-slate-200 text-xs font-semibold pr-2">Ethereum Mainnet</span>
+                <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider">Live</span>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+
+            <div class="lg:col-span-7 flex flex-col">
+
+                <div class="glass-panel rounded-2xl p-6 md:p-8 relative overflow-hidden monitor-glow flex-1">
+                    <div class="absolute -top-20 -right-20 w-64 h-64 bg-lime-500/5 blur-[100px] rounded-full pointer-events-none"></div>
+
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10 border-b border-white/5 pb-8">
+                        <div>
+                            <p class="text-slate-500 text-[10px] uppercase tracking-widest font-bold mb-2">Current Status</p>
+                            <h2 class="text-3xl md:text-4xl font-bold tracking-tight flex items-center gap-3
+                                {% if tx.status == 'approved' %} text-lime-400
+                                {% elif tx.status == 'pending' %} text-amber-400
+                                {% else %} text-rose-400 {% endif %}">
+                                {{ tx.status|title }}
+                            </h2>
+                        </div>
+                        
+                        <div class="bg-slate-900/50 px-5 py-3 rounded-xl border border-white/5 text-right w-full sm:w-auto">
+                            <p class="text-slate-500 text-[10px] uppercase tracking-widest font-bold mb-1">Session Expires</p>
+                            <p id="session-timer" class="text-xl font-mono text-white tabular-nums tracking-tight">05:00</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="group">
+                            <label class="text-slate-500 text-[11px] uppercase tracking-wider font-bold mb-2 block pl-1">Transaction Hash ID</label>
+                            <div class="flex items-center justify-between input-dark rounded-xl pl-4 pr-2 py-3 w-full cursor-pointer">
+                                <div class="flex items-center gap-3 min-w-0 flex-1">
+                                    <svg class="w-4 h-4 text-slate-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path></svg>
+                                    <code class="text-slate-300 font-mono text-sm truncate">
+                                        {{ tx.blockchain_hash|default:"0xe924e408ccc2ba049cb050c9fe5be41caa2d744a93073acfca04a8d6f1..." }}
+                                    </code>
+                                </div>
+                                <button class="text-slate-500 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg ml-2" title="Copy Hash">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="group">
+                            <label class="text-slate-500 text-[11px] uppercase tracking-wider font-bold mb-2 block pl-1">Recipient Address (Seller)</label>
+                            <div class="flex items-center justify-between input-dark rounded-xl pl-3 pr-2 py-2.5 w-full cursor-pointer">
+                                <div class="flex items-center gap-3 min-w-0 flex-1">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-fuchsia-600 ring-2 ring-slate-800 flex-shrink-0"></div> 
+                                    <code class="text-slate-300 font-mono text-sm truncate">
+                                      {{ owner.eth_address|default:"0xcF613fE8B519FCd7ce0fc0306fEb9b2DA9b63Bc1" }}
+                                    </code>
+                                </div>
+                                <button class="text-slate-500 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg ml-2" title="Copy Address">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/40 rounded-xl p-5 mt-8 border border-white/5">
+                        <div class="flex justify-between items-center mb-3">
+    <span class="text-slate-400 text-sm">
+        Land Value (Survey No: {{ tx.survey_number }})
+    </span>
+    <span class="text-slate-200 font-medium font-mono">
+        {{ tx.valuation|floatformat:2 }} INR
+    </span>
+</div>
+
+                        <div class="flex justify-between items-center mb-5">
+                            <span class="text-slate-400 text-sm">Regulatory & Recording Fee</span>
+                            <span class="text-slate-200 font-medium font-mono">500 INR</span>
+                        </div>
+                        <div class="flex justify-between items-end pt-5 border-t border-dashed border-slate-700">
+                        <span class="text-white font-semibold text-sm"> Total Transfer Amount</span>
+                         <span class="text-2xl font-bold text-white font-mono tracking-tighter">
+                         {{ total_amount|floatformat:2 }} INR</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <p class="text-[10px] text-center text-slate-600 mt-4 font-medium uppercase tracking-wide">
+                    Powered by SecureLand Protocol. Immutable record verified on-chain.
+                </p>
+            </div>
+
+            <div class="lg:col-span-5 flex flex-col h-full">
+                <div class="glass-panel rounded-2xl p-6 md:p-8 h-full flex flex-col relative">
+                    
+                    <div class="text-center mb-8">
+                        <h3 class="text-lg font-semibold text-white mb-2">Scan to Verify</h3>
+                        <p class="text-slate-400 text-xs px-4 leading-relaxed">
+                            Use your authentic land registry wallet to verify ownership details.
+                        </p>
+                    </div>
+
+                    <div class="flex-1 flex flex-col items-center justify-center min-h-[200px] mb-8">
+                        <div class="bg-white p-4 rounded-2xl shadow-2xl shadow-black/50 group relative">
+                            <div class="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-lime-400 rounded-tl-lg"></div>
+                            <div class="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-lime-400 rounded-br-lg"></div>
+                            
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://verify.yourdomain.com/v/{{ tx.verification_token }}" 
+                                 alt="Verification QR Code" 
+                                 class="w-48 h-48 mix-blend-multiply opacity-95 group-hover:opacity-100 transition-opacity">
+                        </div>
+                    </div>
+
+                    <div class="space-y-5 mt-auto w-full">
+                        
+                        <div class="w-full">
+                            <label class="text-slate-500 text-[10px] uppercase tracking-wider font-bold mb-1.5 ml-1 block">Contract Address</label>
+                            <div class="flex items-center input-dark rounded-lg pl-3 pr-2 py-2.5 w-full">
+                                <input type="text" value="{{ tx.contract_address|default:'Not Deployed' }}" readonly 
+                                       class="bg-transparent text-slate-300 text-xs font-mono flex-1 outline-none w-full placeholder-slate-600 truncate mr-2" />
+                                <button class="text-lime-400 hover:text-lime-300 hover:bg-lime-400/10 p-1.5 rounded transition-colors" onclick="navigator.clipboard.writeText('{{ tx.contract_address }}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="w-full">
+                            <label class="text-slate-500 text-[10px] uppercase tracking-wider font-bold mb-1.5 ml-1 block">Exact Amount</label>
+                            <div class="flex items-center input-dark rounded-lg pl-3 pr-2 py-2.5 w-full">
+                                <span class="text-slate-500 mr-2 text-xs">$</span>
+                                <input type="text" value="50,050.50" readonly 
+                                       class="bg-transparent text-white text-xs font-mono flex-1 outline-none w-full" />
+                                <button class="text-lime-400 hover:text-lime-300 hover:bg-lime-400/10 p-1.5 rounded transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-red-500/5 border border-red-500/20 rounded-lg p-3 flex gap-3 items-start">
+                            <svg class="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            <p class="text-red-300/80 text-[10px] leading-relaxed">
+                                Only transfer ownership on the <strong>registry network</strong>. Sending funds to other chains may result in permanent loss.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if expired %}
+<div class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div class="glass-panel p-6 rounded-xl text-center max-w-sm">
+        <h3 class="text-red-400 font-semibold mb-2">Session Expired</h3>
+        <p class="text-gray-300 text-sm mb-4">
+            This transaction session has expired for security reasons.
+        </p>
+        <a href="{% url 'transaction_detail' tx.id %}"
+           class="px-4 py-2 bg-lime-500 text-black rounded-lg font-semibold">
+            Re-Authenticate
+        </a>
+    </div>
+</div>
+{% endif %}
+
+
+<script>
+    (function () {
+        let timeLeft = 30; // 5 minutes
+
+        const timerEl = document.getElementById("session-timer");
+        if (!timerEl) return;
+
+        function formatTime(seconds) {
+            const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const s = String(seconds % 60).padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        timerEl.textContent = formatTime(timeLeft);
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            timerEl.textContent = formatTime(timeLeft);
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                window.location.href = "{% url 'auto_logout' %}";
+            }
+        }, 1000);
+    })();
+</script>
+
+{% endblock %}
