@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="w-full max-w-7xl mx-auto px-4 space-y-8">
+    
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="text-3xl font-semibold text-white">My Certificates</h2>
+            <p class="text-slate-400 mt-1 text-sm">View and download your verified blockchain certificates</p>
+        </div>
+        {% if certificates %}
+        <span class="px-4 py-2 rounded-lg bg-slate-700/50 border border-slate-600/50 text-slate-300 text-sm font-medium">
+            {{ certificates|length }} Certificate{{ certificates|length|pluralize }}
+        </span>
+        {% endif %}
+    </div>
+
+   <div class="bg-[#1a202c] rounded-2xl border border-slate-700/50 shadow-2xl backdrop-blur-sm overflow-hidden">
+
+
+        
+        {% if certificates %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-900/30 border-b border-slate-700/50">
+                        <th class="py-4 px-6 font-medium text-slate-400 text-xs uppercase tracking-wide">Certificate ID</th>
+                        <th class="py-4 px-6 font-medium text-slate-400 text-xs uppercase tracking-wide">Type</th>
+                        <th class="py-4 px-6 font-medium text-slate-400 text-xs uppercase tracking-wide">Date Verified</th>
+                        <th class="py-4 px-6 font-medium text-slate-400 text-xs uppercase tracking-wide text-right">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-slate-700/30">
+                    {% for tx in certificates %}
+                    <tr class="hover:bg-slate-700/20 transition-all duration-200">
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-white">#{{ tx.id }}</span>
+                        </td>
+                        
+                        <td class="py-4 px-6">
+                            <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-slate-700/50 text-slate-200 border border-slate-600/50">
+                                {{ tx.get_deed_type_display }}
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="text-sm text-slate-300">{{ tx.verified_at|date:"M d, Y" }}</span>
+                        </td>
+
+                        <td class="py-4 px-6 text-right">
+                            <a href="{{ tx.certificate_file.url }}" 
+                               class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600/10 text-emerald-400 border border-emerald-500/30 rounded-lg hover:bg-emerald-600/20 hover:border-emerald-500/50 transition-all duration-200 text-sm font-medium">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% else %}
+        <div class="flex flex-col items-center justify-center py-20 px-6 text-center">
+            <div class="bg-slate-700/30 p-5 rounded-2xl mb-5 border border-slate-600/30">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-2">No Certificates Yet</h3>
+            <p class="text-slate-400 text-sm max-w-md leading-relaxed">
+                Your verified blockchain certificates will appear here once your transactions are approved and confirmed on the blockchain.
+            </p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

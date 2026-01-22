@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Submit New Transaction - Kerala BLMS{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  crossorigin="" />
+
+<style>
+  #map {
+    height: 400px;
+    border-radius: 0.5rem;
+  }
+</style>
+
+<div class="min-h-screen bg-slate-900 flex flex-col items-center px-6 py-12">
+  <div class="max-w-4xl w-full bg-slate-800 rounded-2xl shadow-lg p-10 border border-slate-700">
+    <h1 class="text-3xl font-bold text-white mb-8 text-center">Submit New Land Transaction</h1>
+
+    {% if messages %}
+      <div class="mb-6">
+        {% for message in messages %}
+          <p class="text-{{ message.tags }}-400 bg-{{ message.tags }}-900 p-3 rounded mb-2">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data" id="transactionForm" novalidate>
+      {% csrf_token %}
+
+      <!-- Step 1: Deed Type -->
+      <div class="mb-8">
+        <label class="block text-white font-semibold mb-2" for="deed_type">1. Choose Deed Type</label>
+        <select id="deed_type" name="deed_type" required
+          class="w-full p-3 rounded-lg bg-slate-700 text-white border border-slate-600 focus:ring-2 focus:ring-accent-400">
+          <option value="" disabled selected>Select deed type</option>
+          <option value="sale">Sale Deed</option>
+          <option value="will">Will</option>
+          <option value="inheritance">Inheritance / Succession</option>
+          <option value="gift">Gift Deed</option>
+          <option value="mortgage">Mortgage</option>
+          <option value="poa">Power of Attorney</option>
+        </select>
+      </div>
+
+      <!-- Step 2: Property & Party Details -->
+      <div class="mb-8">
+        <h2 class="text-white font-semibold mb-2">2. Enter Property & Party Details</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label for="survey_no" class="block text-slate-300 mb-1">Property Survey Number</label>
+            <input type="text" name="survey_no" id="survey_no" required
+              class="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white focus:ring-2 focus:ring-accent-400" />
+          </div>
+          <div>
+            <label for="location" class="block text-slate-300 mb-1">Location (click on map)</label>
+            <input type="hidden" name="location" id="location" required />
+            <div id="map"></div>
+            <p class="text-xs text-slate-400 mt-2">Click on the map to select the location. Coordinates will be saved.</p>
+          </div>
+          <div>
+            <label for="property_valuation" class="block text-slate-300 mb-1">Property Valuation (INR)</label>
+            <input type="number" name="property_valuation" id="property_valuation" required min="0"
+              class="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white focus:ring-2 focus:ring-accent-400" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="party_name" class="block text-slate-300 mb-1">Party Name (Buyer/Seller or Giver/Receiver)</label>
+            <input type="text" name="party_name" id="party_name" required
+              class="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white focus:ring-2 focus:ring-accent-400" />
+          </div>
+          <div>
+            <label for="party_contact" class="block text-slate-300 mb-1">Party Contact Number</label>
+            <input type="tel" name="party_contact" id="party_contact" required pattern="[0-9]{10}"
+              class="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white focus:ring-2 focus:ring-accent-400" />
+          </div>
+          <div class="md:col-span-2">
+            <label for="party_id" class="block text-slate-300 mb-1">Party ID Proof Number</label>
+            <input type="text" name="party_id" id="party_id" required
+              class="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white focus:ring-2 focus:ring-accent-400" />
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Step 2b: Select Sub-Registrar Office -->
+    <div class="mb-8">
+     <label class="block text-slate-300 text-sm mb-2">Select Office</label>
+<select name="office_id" required
+  class="w-full rounded-lg bg-slate-700 text-white px-4 py-3">
+  {% for office in offices %}
+    <option value="{{ office.id }}">{{ office.name }} - {{ office.district }}</option>
+  {% endfor %}
+</select>
+
+  <p class="text-xs text-slate-400 mt-1">Choose the office to submit your transaction to.</p>
+</div>
+
+      <!-- Step 3: Upload Supporting Documents -->
+      <div class="mb-8">
+        <label class="block text-white font-semibold mb-2">3. Upload Supporting Documents <span class="text-xs text-slate-400">(PDF, JPG, PNG; multiple allowed)</span></label>
+        <input type="file" name="documents" id="documents" multiple required
+          class="w-full p-2 rounded-lg bg-slate-700 border border-slate-600 text-white focus:ring-2 focus:ring-accent-400 cursor-pointer" />
+      </div>
+
+      <!-- Step 4: Preview & Confirm Submission -->
+      <div class="flex justify-end space-x-4">
+        <button type="reset" id="resetBtn"
+          class="bg-gray-700 hover:bg-gray-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+          Reset
+        </button>
+        <button type="submit"
+          class="bg-accent-400 hover:bg-accent-500 text-white font-bold px-6 py-3 rounded-lg shadow-lg transition-colors">
+          Submit Application
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  crossorigin=""></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    var map = L.map('map').setView([10.8505, 76.2711], 7);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    var marker;
+
+    map.on('click', function (e) {
+      if (marker) {
+        marker.setLatLng(e.latlng);
+      } else {
+        marker = L.marker(e.latlng).addTo(map);
+      }
+      document.getElementById('location').value = e.latlng.lat + ',' + e.latlng.lng;
+    });
+  });
+</script>
+{% endblock %}

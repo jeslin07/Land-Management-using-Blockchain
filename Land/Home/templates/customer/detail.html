@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block title %}Application #{{ application.id }} - Kerala BLMS{% endblock %}
+
+<!-- Add Leaflet CSS in head -->
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""/>
+<style>
+  #map {
+    height: 400px;
+    width: 100%;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-900 px-6 py-12">
+  <div class="max-w-6xl mx-auto">
+    
+    <!-- Header -->
+    <div class="bg-slate-800 rounded-2xl shadow-xl p-8 border border-slate-700 mb-8">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold text-white">Application #{{ application.id }}</h1>
+        <span class="px-4 py-2 rounded-full text-sm font-semibold
+          {% if application.status == 'approved' %} bg-green-500/20 text-green-300 border border-green-500/30
+          {% elif application.status == 'rejected' %} bg-red-500/20 text-red-300 border border-red-500/30
+          {% else %} bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 {% endif %}">
+          <i class="fas fa-{% if application.status == 'approved' %}check-circle{% elif application.status == 'rejected' %}times-circle{% else %}clock{% endif %} mr-2"></i>
+          {{ application.status|title }}
+        </span>
+      </div>
+
+      <!-- Application Details -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Left Column -->
+        <div class="space-y-4">
+          <div class="bg-slate-700/50 rounded-lg p-4 border border-slate-600">
+            <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Customer Name</p>
+            <p class="text-white font-medium text-lg">{{ application.customer.user.get_full_name }}</p>
+          </div>
+
+          <div class="bg-slate-700/50 rounded-lg p-4 border border-slate-600">
+            <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Deed Type</p>
+            <p class="text-white font-medium">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-accent-400/20 text-accent-300 border border-accent-400/30">
+                {{ application.get_deed_type_display }}
+              </span>
+            </p>
+          </div>
+
+          <div class="bg-slate-700/50 rounded-lg p-4 border border-slate-600">
+            <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Survey Number</p>
+            <p class="text-white font-medium">{{ application.survey_number }}</p>
+          </div>
+
+          <div class="bg-slate-700/50 rounded-lg p-4 border border-slate-600">
+            <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Property Valuation</p>
+            <p class="text-green-400 font-bold text-xl">₹ {{ application.valuation|floatformat:2 }}</p>
+          </div>
+
+          <div class="bg-slate-700/50 rounded-lg p-4 border border-slate-600">
+            <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Submission Date</p>
+            <p class="text-white font-medium">{{ application.submission_date|date:"M d, Y - H:i" }}</p>
+          </div>
+
+          {% if application.status == 'rejected' and application.rejection_reason %}
+          <div class="bg-red-500/10 rounded-lg p-4 border border-red-500/30">
+            <p class="text-red-400 text-xs uppercase tracking-wider mb-2 font-semibold">
+              <i class="fas fa-exclamation-triangle mr-1"></i> Rejection Reason
+            </p>
+            <p class="text-red-300 text-sm">{{ application.rejection_reason }}</p>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-4">
+          <div class="bg-slate-700/50 rounded-lg p-4 border border-slate-600">
+            <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Party Name</p>
+            <p class="text-white font-medium">{{ application.party_name }}</p>
+          </div>
+
+          <div class="bg-slate-700/50 rounded-lg p-4 border border-slate-600">
+            <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Party Contact</p>
+            <p class="text-white font-medium">{{ application.party_contact }}</p>
+          </div>
+
+          <div class="bg-slate-700/50 rounded-lg p-4 border border-slate-600">
+            <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Party ID</p>
+            <p class="text-white font-medium">{{ application.party_id }}</p>
+          </div>
+
+          <div class="bg-slate-700/50 rounded-lg p-4 border border-slate-600">
+            <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Sub-Registrar Office</p>
+            <p class="text-white font-medium">{{ application.office.name }}</p>
+            <p class="text-slate-400 text-sm">{{ application.office.district }}</p>
+          </div>
+
+          {% if application.verified_by %}
+          <div class="bg-blue-500/10 rounded-lg p-4 border border-blue-500/30">
+            <p class="text-blue-400 text-xs uppercase tracking-wider mb-2 font-semibold">
+              <i class="fas fa-user-check mr-1"></i> Verification Details
+            </p>
+            <p class="text-blue-300 text-sm">Verified by: <span class="font-medium">{{ application.verified_by.user.get_full_name }}</span></p>
+            <p class="text-blue-300 text-sm">Date: {{ application.verified_at|date:"M d, Y - H:i" }}</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+ 
+
+    <!-- Documents -->
+<div class="bg-slate-800 rounded-2xl shadow-xl p-8 border border-slate-700 mb-8">
+
+  <h2 class="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+    <i class="fas fa-file-alt text-accent-400"></i>
+    Uploaded Documents
+  </h2>
+
+  {% if application.documents %}
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    {% for doc in application.documents %}
+
+      <div class="bg-slate-700/50 rounded-lg p-5 border border-slate-600">
+
+        <p class="text-white font-medium truncate">Document</p>
+
+        <p class="text-slate-400 text-xs truncate mt-1">
+          {{ doc }}
+        </p>
+
+        <div class="flex gap-2 mt-3">
+
+          <a href="{{ MEDIA_URL }}{{ doc }}" target="_blank"
+             class="inline-flex items-center gap-2 px-4 py-2 bg-accent-400 hover:bg-accent-500 text-slate-900 text-sm font-semibold rounded-lg">
+            View
+          </a>
+
+          <a href="{{ MEDIA_URL }}{{ doc }}" download
+             class="inline-flex items-center gap-2 px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white text-sm font-semibold rounded-lg">
+            Download
+          </a>
+
+        </div>
+
+      </div>
+
+    {% endfor %}
+
+  </div>
+
+  {% else %}
+
+  <div class="text-center py-12">
+    <p class="text-slate-400 text-base font-medium">No documents uploaded</p>
+    <p class="text-slate-500 text-sm mt-1">Documents will appear here once uploaded</p>
+  </div>
+
+  {% endif %}
+
+</div>
+
+
+
+    <!-- Action Buttons -->
+    <div class="flex justify-between items-center gap-4">
+      <a href="{% url 'registrar_dashboard' %}" 
+        class="inline-flex items-center gap-2 px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+        <i class="fas fa-arrow-left text-sm"></i>
+        Back to Dashboard
+      </a>
+
+      {% if application.status == 'pending' %}
+<div class="flex gap-3">
+
+  <!-- APPROVE (MetaMask) -->
+  <button id="approveBtn"
+    class="inline-flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg shadow-md transition-all">
+    <i class="fas fa-check text-sm"></i>
+    Approve & Anchor
+  </button>
+
+  <!-- REJECT -->
+  <form method="POST" action="{% url 'application_reject' application.id %}">
+    {% csrf_token %}
+    <button
+      class="inline-flex items-center gap-2 px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow-md transition-all">
+      <i class="fas fa-times text-sm"></i>
+      Reject
+    </button>
+  </form>
+
+</div>
+{% endif %}
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const approveBtn = document.getElementById("approveBtn");
+  const approveApi = "{% url 'application_approve' application.id %}";
+  const receiver = "{{ application.customer.eth_address|default:'' }}";
+
+  async function ensureGanache() {
+    const ganacheId = "0x539"; // 1337 (Ganache)
+    try {
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: ganacheId }],
+      });
+    } catch (err) {
+      if (err.code === 4902) {
+        await ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [{
+            chainId: ganacheId,
+            chainName: "Ganache Local",
+            rpcUrls: ["http://127.0.0.1:7545"],
+            nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 }
+          }]
+        });
+      } else {
+        throw err;
+      }
+    }
+  }
+
+  approveBtn?.addEventListener("click", async () => {
+    if (!window.ethereum) {
+      alert("MetaMask not detected");
+      return;
+    }
+
+    try {
+      // 🔄 Force MetaMask onto Ganache
+      await ensureGanache();
+
+      // 👛 connect account
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts"
+      });
+
+      // 💸 build tx (0.01 ETH — Ganache only)
+      const tx = {
+        from: accounts[0],
+        to: receiver || accounts[0],
+        value: "0x2386F26FC10000" // 0.01 ETH
+      };
+
+      // 🟢 popup confirm
+      const txHash = await ethereum.request({
+        method: "eth_sendTransaction",
+        params: [tx],
+      });
+
+      // 📬 send hash to Django
+      const resp = await fetch(approveApi, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ tx_hash: txHash })
+      });
+
+      if (!resp.ok) throw new Error("Server rejected");
+
+      alert("Approved & anchored (Ganache)!\n" + txHash);
+      window.location.reload();
+
+    } catch (err) {
+      console.error(err);
+      alert("Approval failed: " + (err.message || err));
+    }
+  });
+</script>
+
+
+{% endblock %}
